@@ -1,59 +1,155 @@
-# Proto SSO contract
+---
+
+# Proto SSO Contract
+
 ### Overview
-This repository contains the gRPC contract for the SSO (Auth) service, generated Go code and a convenience script to generate the code. Below are instructions to get started, generate the Go sources from the .proto file and a recommended disclaimer about responsibility for the code.
+Этот репозиторий содержит контракт SSO/Auth сервиса в формате Protocol Buffers, а также конфигурацию для генерации Go, TypeScript и OpenAPI артефактов. Генерация выполняется через **Buf v2** и **remote‑plugins**, поэтому локальная установка `protoc`, `go install` или `npm install` больше не требуется. Вся генерация выполняется в Docker.
 
-### Getting started
-- Go: 1.17+ (recommended)
+---
 
-- protoc: install from https://protobuf.dev/downloads
+## Getting started
 
-- protoc plugins:
+### Requirements
+Локально требуется только:
 
-```bash
-go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
-go install github.com/bufbuild/buf/cmd/buf@latest
+- **Buf CLI**  
+  Установка:
+  ```bash
+  brew install buf
+  ```
+- **Docker**
+- Плагин Buf для вашей IDE (GoLand / VS Code) — для корректного резолвинга импортов.
 
-Make sure $(go env GOPATH)/bin or GOBIN is added to your PATH.
-```
-- Generate Go code from proto
-  Command
-```bash
-protoc -I proto proto/sso/sso.proto \
---go_out=./gen/go --go_opt=paths=source_relative \
---go-grpc_out=./gen/go --go-grpc_opt=paths=source_relative
-```
-### Convenience script.
-- You can create a script to automate plugin installation and code generation.
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-export PATH="$PATH:$(go env GOPATH)/bin"
-
-command -v protoc >/dev/null 2>&1 || { echo "protoc not found"; exit 1; }
-command -v protoc-gen-go >/dev/null 2>&1 || go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-command -v protoc-gen-go-grpc >/dev/null 2>&1 || go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-
-protoc -I proto proto/sso/sso.proto \
---go_out=./gen/go --go_opt=paths=source_relative \
---go-grpc_out=./gen/go --go-grpc_opt=paths=source_relative \
---openapiv2_out ./gen/openapi
+### Project structure
 
 ```
-- Make it executable and run:
+proto/
+  sso/
+    auth/
+      v1/
+        auth.proto
+
+gen/
+  go/
+  ts/
+  openapi/
+
+buf.yaml
+buf.gen.yaml
+buf.work.yaml
+DockerfileGenProto
+Taskfile.yml
+```
+
+---
+
+## Code generation
+
+### Buf v2 (managed mode)
+
+Файл `buf.gen.yaml`:
+
+```yaml
+version: v2
+
+managed:
+  enabled: true
+
+plugins:
+  - remote: buf.build/connectrpc/es
+    out: gen/ts
+
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+
+  - remote: buf.build/connectrpc/go
+    out: gen/go
+
+  - remote: buf.build/grpc-ecosystem/openapiv2
+    out: gen/openapi
+    opt:
+      - allow_merge=true
+      - merge_file_name=sso_auth
+```
+
+Buf автоматически скачивает плагины из Buf Registry.  
+Никаких локальных бинарников не требуется.
+
+---
+
+## Docker‑based generation
+
+### DockerfileGenProto
+
+```dockerfile
+FROM alpine:3.19
+
+RUN apk add --no-cache curl unzip
+
+RUN curl -sSL \
+    "https://github.com/bufbuild/buf/releases/download/v1.34.0/buf-Linux-x86_64" \
+    -o /usr/local/bin/buf \
+    && chmod +x /usr/local/bin/buf
+
+WORKDIR /workspace
+
+CMD ["buf", "generate"]
+```
+
+### Run generation
 
 ```bash
-chmod +x scripts/gen-proto.sh
-./scripts/gen-proto.sh
+docker build -t protos-sso-gen -f DockerfileGenProto .
+docker run --rm -v $(pwd):/workspace protos-sso-gen
 ```
-### Notes and recommendations
-- Generated code will be placed under ./gen/go when using the commands above.
 
-- Keep option go_package in the .proto consistent with your module path to avoid import issues.
+Сгенерированные файлы появятся в:
 
-- Add the generation step to CI so generated sources are always up to date before builds.
+```
+gen/go
+gen/ts
+gen/openapi
+```
 
-- Do not commit large generated files unless that is your project policy; prefer generating in CI or as part of the build process.
+---
+
+## Taskfile (optional but convenient)
+
+```yaml
+version: "3"
+
+tasks:
+  gen:
+    desc: Generate all code via Docker (Buf v2 remote plugins)
+    cmds:
+      - docker build -t protos-sso-gen -f DockerfileGenProto .
+      - docker run --rm -v {{.PWD}}:/workspace protos-sso-gen
+
+  lint:
+    desc: Run buf lint locally
+    cmds:
+      - buf lint
+
+  deps:
+    desc: Update buf dependencies
+    cmds:
+      - buf dep update
+```
+
+---
+
+## Notes and recommendations
+
+- Buf v2 remote‑plugins обеспечивают одинаковую генерацию локально, в Docker и в CI.
+- IDE использует локальный Buf CLI для резолвинга импортов — Docker на это не влияет.
+- Не требуется устанавливать:
+  - `protoc`
+  - `protoc-gen-go`
+  - `protoc-gen-es`
+  - `protoc-gen-connect-go`
+  - `npm install`
+  - `go install`
+- Добавьте генерацию в CI, чтобы артефакты всегда были актуальны.
+- Поддерживайте `buf.lock` в репозитории — это фиксирует версии remote‑plugins.
+
+---
