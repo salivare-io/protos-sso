@@ -2,17 +2,19 @@ version: "3"
 
 tasks:
   gen:
-    desc: Generate all code via Docker (Buf v2 remote plugins)
+    desc: Generate all code via Docker
     cmds:
       - docker build -t protos-sso-gen -f DockerfileGenProto .
-      - docker run --rm -v {{.PWD}}:/workspace protos-sso-gen
+      - rm -rf gen/ts gen/go gen/openapi
+
+      - docker run --rm -v {{.PWD}}:/workspace protos-sso-gen buf generate --template buf.gen.go.yaml
+
+      - docker run --rm -v {{.PWD}}:/workspace protos-sso-gen buf generate --template buf.gen.ts.yaml --path proto/sso/api
 
   lint:
-    desc: Run buf lint locally
     cmds:
-      - buf lint
+      - buf lint proto
 
   deps:
-    desc: Update buf dependencies
     cmds:
-      - buf dep update
+      - buf mod update proto

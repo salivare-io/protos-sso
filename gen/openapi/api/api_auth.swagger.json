@@ -8,9 +8,6 @@
   "tags": [
     {
       "name": "AuthApiService"
-    },
-    {
-      "name": "AuthService"
     }
   ],
   "schemes": [
@@ -32,7 +29,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1ExchangeCodeResponse"
+              "$ref": "#/definitions/v1ExchangeCodeResponse"
             }
           },
           "default": {
@@ -48,7 +45,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1ExchangeCodeRequest"
+              "$ref": "#/definitions/v1ExchangeCodeRequest"
             }
           }
         ],
@@ -66,7 +63,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1LogoutResponse"
+              "$ref": "#/definitions/v1LogoutResponse"
             }
           },
           "default": {
@@ -82,7 +79,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1LogoutRequest"
+              "$ref": "#/definitions/v1LogoutRequest"
             }
           }
         ],
@@ -100,7 +97,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1GetPermissionsResponse"
+              "$ref": "#/definitions/v1GetPermissionsResponse"
             }
           },
           "default": {
@@ -158,7 +155,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1RefreshTokenResponse"
+              "$ref": "#/definitions/v1RefreshTokenResponse"
             }
           },
           "default": {
@@ -174,7 +171,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1RefreshTokenRequest"
+              "$ref": "#/definitions/v1RefreshTokenRequest"
             }
           }
         ],
@@ -192,7 +189,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1RevokeRefreshTokenResponse"
+              "$ref": "#/definitions/v1RevokeRefreshTokenResponse"
             }
           },
           "default": {
@@ -208,221 +205,12 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ssoApiAuthV1RevokeRefreshTokenRequest"
+              "$ref": "#/definitions/v1RevokeRefreshTokenRequest"
             }
           }
         ],
         "tags": [
           "Auth API"
-        ]
-      }
-    },
-    "/v1/auth/exchange": {
-      "post": {
-        "summary": "Обмен OAuth2 code на access/refresh токены",
-        "description": "Требуются заголовки: X-Client-Id, X-Client-Secret",
-        "operationId": "AuthService_ExchangeCode",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1ExchangeCodeResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1ExchangeCodeRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/v1/auth/logout": {
-      "post": {
-        "summary": "Выход пользователя",
-        "description": "Инвалидация refresh токена",
-        "operationId": "AuthService_Logout",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1LogoutResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1LogoutRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/v1/auth/permissions": {
-      "get": {
-        "summary": "Получение списка permissions пользователя",
-        "description": "Требуется заголовок Authorization: Bearer \u003ctoken\u003e",
-        "operationId": "AuthService_GetPermissions",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1GetPermissionsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "accessToken",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Auth"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ]
-      }
-    },
-    "/v1/auth/refresh": {
-      "post": {
-        "summary": "Обновление токенов",
-        "description": "Требуются заголовки: X-Client-Id, X-Client-Secret",
-        "operationId": "AuthService_RefreshToken",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1RefreshTokenResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1RefreshTokenRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/v1/auth/revoke": {
-      "post": {
-        "summary": "Принудительная инвалидация refresh токена",
-        "operationId": "AuthService_RevokeRefreshToken",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1RevokeRefreshTokenResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ssoServiceAuthV1RevokeRefreshTokenRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Auth"
-        ]
-      }
-    },
-    "/v1/auth/user": {
-      "get": {
-        "summary": "Получение информации о пользователе",
-        "description": "Требуется заголовок Authorization: Bearer \u003ctoken\u003e",
-        "operationId": "AuthService_UserDetails",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UserDetailsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "accessToken",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Auth"
-        ],
-        "security": [
-          {
-            "BearerAuth": []
-          }
         ]
       }
     }
@@ -456,19 +244,18 @@
         }
       }
     },
-    "ssoApiAuthV1ExchangeCodeRequest": {
+    "v1ExchangeCodeRequest": {
       "type": "object",
       "properties": {
         "provider": {
-          "type": "string",
-          "title": "GOOGLE / YANDEX — строкой, чтобы фронту было проще"
+          "type": "string"
         },
         "code": {
           "type": "string"
         }
       }
     },
-    "ssoApiAuthV1ExchangeCodeResponse": {
+    "v1ExchangeCodeResponse": {
       "type": "object",
       "properties": {
         "accessToken": {
@@ -479,155 +266,17 @@
         }
       }
     },
-    "ssoApiAuthV1GetPermissionsResponse": {
+    "v1GetPermissionsResponse": {
       "type": "object",
       "properties": {
         "permissions": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/ssoApiAuthV1Permission"
+            "$ref": "#/definitions/v1Permission"
           }
         }
       }
-    },
-    "ssoApiAuthV1LogoutRequest": {
-      "type": "object",
-      "properties": {
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoApiAuthV1LogoutResponse": {
-      "type": "object"
-    },
-    "ssoApiAuthV1Permission": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoApiAuthV1RefreshTokenRequest": {
-      "type": "object",
-      "properties": {
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoApiAuthV1RefreshTokenResponse": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoApiAuthV1RevokeRefreshTokenRequest": {
-      "type": "object",
-      "properties": {
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoApiAuthV1RevokeRefreshTokenResponse": {
-      "type": "object"
-    },
-    "ssoServiceAuthV1ExchangeCodeRequest": {
-      "type": "object",
-      "properties": {
-        "provider": {
-          "$ref": "#/definitions/v1Provider"
-        },
-        "code": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1ExchangeCodeResponse": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1GetPermissionsResponse": {
-      "type": "object",
-      "properties": {
-        "permissions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/ssoServiceAuthV1Permission"
-          }
-        }
-      }
-    },
-    "ssoServiceAuthV1LogoutRequest": {
-      "type": "object",
-      "properties": {
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1LogoutResponse": {
-      "type": "object"
-    },
-    "ssoServiceAuthV1Permission": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1RefreshTokenRequest": {
-      "type": "object",
-      "properties": {
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1RefreshTokenResponse": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1RevokeRefreshTokenRequest": {
-      "type": "object",
-      "properties": {
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "ssoServiceAuthV1RevokeRefreshTokenResponse": {
-      "type": "object"
     },
     "v1GetProfileResponse": {
       "type": "object",
@@ -644,29 +293,57 @@
         }
       }
     },
-    "v1Provider": {
-      "type": "string",
-      "enum": [
-        "PROVIDER_UNSPECIFIED",
-        "PROVIDER_GOOGLE",
-        "PROVIDER_YANDEX"
-      ],
-      "default": "PROVIDER_UNSPECIFIED"
-    },
-    "v1UserDetailsResponse": {
+    "v1LogoutRequest": {
       "type": "object",
       "properties": {
-        "userId": {
-          "type": "string",
-          "format": "int64"
-        },
-        "email": {
-          "type": "string"
-        },
-        "name": {
+        "refreshToken": {
           "type": "string"
         }
       }
+    },
+    "v1LogoutResponse": {
+      "type": "object"
+    },
+    "v1Permission": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RefreshTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RevokeRefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RevokeRefreshTokenResponse": {
+      "type": "object"
     }
   },
   "securityDefinitions": {

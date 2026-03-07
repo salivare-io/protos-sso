@@ -58,9 +58,7 @@ type AuthApiServiceClient interface {
 	RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error)
 	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
 	RevokeRefreshToken(context.Context, *connect.Request[v1.RevokeRefreshTokenRequest]) (*connect.Response[v1.RevokeRefreshTokenResponse], error)
-	// --- Профиль ---
 	GetProfile(context.Context, *connect.Request[v1.GetProfileRequest]) (*connect.Response[v1.GetProfileResponse], error)
-	// --- Permissions ---
 	GetPermissions(context.Context, *connect.Request[v1.GetPermissionsRequest]) (*connect.Response[v1.GetPermissionsResponse], error)
 }
 
@@ -160,9 +158,7 @@ type AuthApiServiceHandler interface {
 	RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error)
 	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
 	RevokeRefreshToken(context.Context, *connect.Request[v1.RevokeRefreshTokenRequest]) (*connect.Response[v1.RevokeRefreshTokenResponse], error)
-	// --- Профиль ---
 	GetProfile(context.Context, *connect.Request[v1.GetProfileRequest]) (*connect.Response[v1.GetProfileResponse], error)
-	// --- Permissions ---
 	GetPermissions(context.Context, *connect.Request[v1.GetPermissionsRequest]) (*connect.Response[v1.GetPermissionsResponse], error)
 }
 
