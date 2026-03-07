@@ -1,0 +1,680 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Frontend Auth API",
+    "description": "API для фронтенда. Backend проксирует запросы в SSO и возвращает токены, профиль и permissions.",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "AuthApiService"
+    },
+    {
+      "name": "AuthService"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/api/auth/exchange": {
+      "post": {
+        "summary": "Обмен OAuth2 code на access/refresh токены",
+        "description": "Backend вызывает SSO.AuthService.ExchangeCode",
+        "operationId": "AuthApiService_ExchangeCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1ExchangeCodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1ExchangeCodeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth API"
+        ]
+      }
+    },
+    "/v1/api/auth/logout": {
+      "post": {
+        "summary": "Выход пользователя",
+        "description": "Backend вызывает SSO.AuthService.Logout",
+        "operationId": "AuthApiService_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1LogoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1LogoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth API"
+        ]
+      }
+    },
+    "/v1/api/auth/permissions": {
+      "get": {
+        "summary": "Получение списка permissions",
+        "description": "Backend вызывает SSO.AuthService.GetPermissions",
+        "operationId": "AuthApiService_GetPermissions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1GetPermissionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Auth API"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/api/auth/profile": {
+      "get": {
+        "summary": "Получение профиля пользователя",
+        "description": "Backend валидирует токен через SSO и возвращает профиль",
+        "operationId": "AuthApiService_GetProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Auth API"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/api/auth/refresh": {
+      "post": {
+        "summary": "Обновление токенов",
+        "description": "Backend вызывает SSO.AuthService.RefreshToken",
+        "operationId": "AuthApiService_RefreshToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1RefreshTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1RefreshTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth API"
+        ]
+      }
+    },
+    "/v1/api/auth/revoke": {
+      "post": {
+        "summary": "Принудительная инвалидация refresh токена",
+        "description": "Backend вызывает SSO.AuthService.RevokeRefreshToken",
+        "operationId": "AuthApiService_RevokeRefreshToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1RevokeRefreshTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoApiAuthV1RevokeRefreshTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth API"
+        ]
+      }
+    },
+    "/v1/auth/exchange": {
+      "post": {
+        "summary": "Обмен OAuth2 code на access/refresh токены",
+        "description": "Требуются заголовки: X-Client-Id, X-Client-Secret",
+        "operationId": "AuthService_ExchangeCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1ExchangeCodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1ExchangeCodeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "summary": "Выход пользователя",
+        "description": "Инвалидация refresh токена",
+        "operationId": "AuthService_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1LogoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1LogoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/permissions": {
+      "get": {
+        "summary": "Получение списка permissions пользователя",
+        "description": "Требуется заголовок Authorization: Bearer \u003ctoken\u003e",
+        "operationId": "AuthService_GetPermissions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1GetPermissionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accessToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "summary": "Обновление токенов",
+        "description": "Требуются заголовки: X-Client-Id, X-Client-Secret",
+        "operationId": "AuthService_RefreshToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1RefreshTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1RefreshTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/revoke": {
+      "post": {
+        "summary": "Принудительная инвалидация refresh токена",
+        "operationId": "AuthService_RevokeRefreshToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1RevokeRefreshTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ssoServiceAuthV1RevokeRefreshTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/user": {
+      "get": {
+        "summary": "Получение информации о пользователе",
+        "description": "Требуется заголовок Authorization: Bearer \u003ctoken\u003e",
+        "operationId": "AuthService_UserDetails",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UserDetailsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accessToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "ssoApiAuthV1ExchangeCodeRequest": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "title": "GOOGLE / YANDEX — строкой, чтобы фронту было проще"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1ExchangeCodeResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1GetPermissionsResponse": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ssoApiAuthV1Permission"
+          }
+        }
+      }
+    },
+    "ssoApiAuthV1LogoutRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1LogoutResponse": {
+      "type": "object"
+    },
+    "ssoApiAuthV1Permission": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1RefreshTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1RevokeRefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoApiAuthV1RevokeRefreshTokenResponse": {
+      "type": "object"
+    },
+    "ssoServiceAuthV1ExchangeCodeRequest": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "$ref": "#/definitions/v1Provider"
+        },
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1ExchangeCodeResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1GetPermissionsResponse": {
+      "type": "object",
+      "properties": {
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/ssoServiceAuthV1Permission"
+          }
+        }
+      }
+    },
+    "ssoServiceAuthV1LogoutRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1LogoutResponse": {
+      "type": "object"
+    },
+    "ssoServiceAuthV1Permission": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1RefreshTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1RevokeRefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "ssoServiceAuthV1RevokeRefreshTokenResponse": {
+      "type": "object"
+    },
+    "v1GetProfileResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Provider": {
+      "type": "string",
+      "enum": [
+        "PROVIDER_UNSPECIFIED",
+        "PROVIDER_GOOGLE",
+        "PROVIDER_YANDEX"
+      ],
+      "default": "PROVIDER_UNSPECIFIED"
+    },
+    "v1UserDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "description": "Bearer \u003caccess_token\u003e",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

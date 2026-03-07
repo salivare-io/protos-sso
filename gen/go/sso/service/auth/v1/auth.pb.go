@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        (unknown)
-// source: proto/sso/auth/v1/auth.proto
+// source: sso/service/auth/v1/auth.proto
 
-package authv1
+package authservicev1
 
 import (
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
@@ -27,21 +27,21 @@ type Provider int32
 
 const (
 	Provider_PROVIDER_UNSPECIFIED Provider = 0
-	Provider_GOOGLE               Provider = 1
-	Provider_YANDEX               Provider = 2
+	Provider_PROVIDER_GOOGLE      Provider = 1
+	Provider_PROVIDER_YANDEX      Provider = 2
 )
 
 // Enum value maps for Provider.
 var (
 	Provider_name = map[int32]string{
 		0: "PROVIDER_UNSPECIFIED",
-		1: "GOOGLE",
-		2: "YANDEX",
+		1: "PROVIDER_GOOGLE",
+		2: "PROVIDER_YANDEX",
 	}
 	Provider_value = map[string]int32{
 		"PROVIDER_UNSPECIFIED": 0,
-		"GOOGLE":               1,
-		"YANDEX":               2,
+		"PROVIDER_GOOGLE":      1,
+		"PROVIDER_YANDEX":      2,
 	}
 )
 
@@ -56,11 +56,11 @@ func (x Provider) String() string {
 }
 
 func (Provider) Descriptor() protoreflect.EnumDescriptor {
-	return file_proto_sso_auth_v1_auth_proto_enumTypes[0].Descriptor()
+	return file_sso_service_auth_v1_auth_proto_enumTypes[0].Descriptor()
 }
 
 func (Provider) Type() protoreflect.EnumType {
-	return &file_proto_sso_auth_v1_auth_proto_enumTypes[0]
+	return &file_sso_service_auth_v1_auth_proto_enumTypes[0]
 }
 
 func (x Provider) Number() protoreflect.EnumNumber {
@@ -69,12 +69,12 @@ func (x Provider) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Provider.Descriptor instead.
 func (Provider) EnumDescriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{0}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{0}
 }
 
 type ExchangeCodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Provider      Provider               `protobuf:"varint,1,opt,name=provider,proto3,enum=sso.auth.v1.Provider" json:"provider,omitempty"`
+	Provider      Provider               `protobuf:"varint,1,opt,name=provider,proto3,enum=sso.service.auth.v1.Provider" json:"provider,omitempty"`
 	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -82,7 +82,7 @@ type ExchangeCodeRequest struct {
 
 func (x *ExchangeCodeRequest) Reset() {
 	*x = ExchangeCodeRequest{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[0]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -94,7 +94,7 @@ func (x *ExchangeCodeRequest) String() string {
 func (*ExchangeCodeRequest) ProtoMessage() {}
 
 func (x *ExchangeCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[0]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,7 +107,7 @@ func (x *ExchangeCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExchangeCodeRequest.ProtoReflect.Descriptor instead.
 func (*ExchangeCodeRequest) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{0}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ExchangeCodeRequest) GetProvider() Provider {
@@ -134,7 +134,7 @@ type ExchangeCodeResponse struct {
 
 func (x *ExchangeCodeResponse) Reset() {
 	*x = ExchangeCodeResponse{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[1]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -146,7 +146,7 @@ func (x *ExchangeCodeResponse) String() string {
 func (*ExchangeCodeResponse) ProtoMessage() {}
 
 func (x *ExchangeCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[1]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -159,7 +159,7 @@ func (x *ExchangeCodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExchangeCodeResponse.ProtoReflect.Descriptor instead.
 func (*ExchangeCodeResponse) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{1}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ExchangeCodeResponse) GetAccessToken() string {
@@ -185,7 +185,7 @@ type UserDetailsRequest struct {
 
 func (x *UserDetailsRequest) Reset() {
 	*x = UserDetailsRequest{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[2]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -197,7 +197,7 @@ func (x *UserDetailsRequest) String() string {
 func (*UserDetailsRequest) ProtoMessage() {}
 
 func (x *UserDetailsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[2]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -210,7 +210,7 @@ func (x *UserDetailsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserDetailsRequest.ProtoReflect.Descriptor instead.
 func (*UserDetailsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{2}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UserDetailsRequest) GetAccessToken() string {
@@ -231,7 +231,7 @@ type UserDetailsResponse struct {
 
 func (x *UserDetailsResponse) Reset() {
 	*x = UserDetailsResponse{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[3]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -243,7 +243,7 @@ func (x *UserDetailsResponse) String() string {
 func (*UserDetailsResponse) ProtoMessage() {}
 
 func (x *UserDetailsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[3]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -256,7 +256,7 @@ func (x *UserDetailsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserDetailsResponse.ProtoReflect.Descriptor instead.
 func (*UserDetailsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{3}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UserDetailsResponse) GetUserId() int64 {
@@ -289,7 +289,7 @@ type RefreshTokenRequest struct {
 
 func (x *RefreshTokenRequest) Reset() {
 	*x = RefreshTokenRequest{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[4]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -301,7 +301,7 @@ func (x *RefreshTokenRequest) String() string {
 func (*RefreshTokenRequest) ProtoMessage() {}
 
 func (x *RefreshTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[4]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -314,7 +314,7 @@ func (x *RefreshTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshTokenRequest.ProtoReflect.Descriptor instead.
 func (*RefreshTokenRequest) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{4}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *RefreshTokenRequest) GetRefreshToken() string {
@@ -334,7 +334,7 @@ type RefreshTokenResponse struct {
 
 func (x *RefreshTokenResponse) Reset() {
 	*x = RefreshTokenResponse{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[5]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -346,7 +346,7 @@ func (x *RefreshTokenResponse) String() string {
 func (*RefreshTokenResponse) ProtoMessage() {}
 
 func (x *RefreshTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[5]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +359,7 @@ func (x *RefreshTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefreshTokenResponse.ProtoReflect.Descriptor instead.
 func (*RefreshTokenResponse) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{5}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *RefreshTokenResponse) GetAccessToken() string {
@@ -385,7 +385,7 @@ type LogoutRequest struct {
 
 func (x *LogoutRequest) Reset() {
 	*x = LogoutRequest{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[6]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -397,7 +397,7 @@ func (x *LogoutRequest) String() string {
 func (*LogoutRequest) ProtoMessage() {}
 
 func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[6]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -410,7 +410,7 @@ func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
 func (*LogoutRequest) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{6}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *LogoutRequest) GetRefreshToken() string {
@@ -428,7 +428,7 @@ type LogoutResponse struct {
 
 func (x *LogoutResponse) Reset() {
 	*x = LogoutResponse{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[7]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -440,7 +440,7 @@ func (x *LogoutResponse) String() string {
 func (*LogoutResponse) ProtoMessage() {}
 
 func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[7]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -453,7 +453,7 @@ func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutResponse.ProtoReflect.Descriptor instead.
 func (*LogoutResponse) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{7}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{7}
 }
 
 type RevokeRefreshTokenRequest struct {
@@ -465,7 +465,7 @@ type RevokeRefreshTokenRequest struct {
 
 func (x *RevokeRefreshTokenRequest) Reset() {
 	*x = RevokeRefreshTokenRequest{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[8]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -477,7 +477,7 @@ func (x *RevokeRefreshTokenRequest) String() string {
 func (*RevokeRefreshTokenRequest) ProtoMessage() {}
 
 func (x *RevokeRefreshTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[8]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -490,7 +490,7 @@ func (x *RevokeRefreshTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeRefreshTokenRequest.ProtoReflect.Descriptor instead.
 func (*RevokeRefreshTokenRequest) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{8}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *RevokeRefreshTokenRequest) GetRefreshToken() string {
@@ -508,7 +508,7 @@ type RevokeRefreshTokenResponse struct {
 
 func (x *RevokeRefreshTokenResponse) Reset() {
 	*x = RevokeRefreshTokenResponse{}
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[9]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -520,7 +520,7 @@ func (x *RevokeRefreshTokenResponse) String() string {
 func (*RevokeRefreshTokenResponse) ProtoMessage() {}
 
 func (x *RevokeRefreshTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_sso_auth_v1_auth_proto_msgTypes[9]
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -533,16 +533,156 @@ func (x *RevokeRefreshTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeRefreshTokenResponse.ProtoReflect.Descriptor instead.
 func (*RevokeRefreshTokenResponse) Descriptor() ([]byte, []int) {
-	return file_proto_sso_auth_v1_auth_proto_rawDescGZIP(), []int{9}
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{9}
 }
 
-var File_proto_sso_auth_v1_auth_proto protoreflect.FileDescriptor
+type Permission struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_proto_sso_auth_v1_auth_proto_rawDesc = "" +
+func (x *Permission) Reset() {
+	*x = Permission{}
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Permission) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Permission) ProtoMessage() {}
+
+func (x *Permission) ProtoReflect() protoreflect.Message {
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Permission.ProtoReflect.Descriptor instead.
+func (*Permission) Descriptor() ([]byte, []int) {
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *Permission) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *Permission) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+type GetPermissionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AccessToken   string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPermissionsRequest) Reset() {
+	*x = GetPermissionsRequest{}
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPermissionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPermissionsRequest) ProtoMessage() {}
+
+func (x *GetPermissionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPermissionsRequest.ProtoReflect.Descriptor instead.
+func (*GetPermissionsRequest) Descriptor() ([]byte, []int) {
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetPermissionsRequest) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
+	}
+	return ""
+}
+
+type GetPermissionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Permissions   []*Permission          `protobuf:"bytes,1,rep,name=permissions,proto3" json:"permissions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPermissionsResponse) Reset() {
+	*x = GetPermissionsResponse{}
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPermissionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPermissionsResponse) ProtoMessage() {}
+
+func (x *GetPermissionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_sso_service_auth_v1_auth_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPermissionsResponse.ProtoReflect.Descriptor instead.
+func (*GetPermissionsResponse) Descriptor() ([]byte, []int) {
+	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetPermissionsResponse) GetPermissions() []*Permission {
+	if x != nil {
+		return x.Permissions
+	}
+	return nil
+}
+
+var File_sso_service_auth_v1_auth_proto protoreflect.FileDescriptor
+
+const file_sso_service_auth_v1_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x1cproto/sso/auth/v1/auth.proto\x12\vsso.auth.v1\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\\\n" +
-	"\x13ExchangeCodeRequest\x121\n" +
-	"\bprovider\x18\x01 \x01(\x0e2\x15.sso.auth.v1.ProviderR\bprovider\x12\x12\n" +
+	"\x1esso/service/auth/v1/auth.proto\x12\x13sso.service.auth.v1\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"d\n" +
+	"\x13ExchangeCodeRequest\x129\n" +
+	"\bprovider\x18\x01 \x01(\x0e2\x1d.sso.service.auth.v1.ProviderR\bprovider\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\"^\n" +
 	"\x14ExchangeCodeResponse\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
@@ -563,99 +703,117 @@ const file_proto_sso_auth_v1_auth_proto_rawDesc = "" +
 	"\x0eLogoutResponse\"@\n" +
 	"\x19RevokeRefreshTokenRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"\x1c\n" +
-	"\x1aRevokeRefreshTokenResponse*<\n" +
+	"\x1aRevokeRefreshTokenResponse\"B\n" +
+	"\n" +
+	"Permission\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\":\n" +
+	"\x15GetPermissionsRequest\x12!\n" +
+	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\"[\n" +
+	"\x16GetPermissionsResponse\x12A\n" +
+	"\vpermissions\x18\x01 \x03(\v2\x1f.sso.service.auth.v1.PermissionR\vpermissions*N\n" +
 	"\bProvider\x12\x18\n" +
-	"\x14PROVIDER_UNSPECIFIED\x10\x00\x12\n" +
-	"\n" +
-	"\x06GOOGLE\x10\x01\x12\n" +
-	"\n" +
-	"\x06YANDEX\x10\x022\x8d\t\n" +
-	"\x04Auth\x12\xfa\x01\n" +
-	"\fExchangeCode\x12 .sso.auth.v1.ExchangeCodeRequest\x1a!.sso.auth.v1.ExchangeCodeResponse\"\xa4\x01\x92A\x84\x01\n" +
-	"\x04Auth\x127Обмен OAuth2 code на access/refresh токены\x1aCТребуются заголовки: X-Client-Id, X-Client-Secret\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/auth/exchange\x12\x8e\x02\n" +
-	"\vUserDetails\x12\x1f.sso.auth.v1.UserDetailsRequest\x1a .sso.auth.v1.UserDetailsResponse\"\xbb\x01\x92A\xa2\x01\n" +
+	"\x14PROVIDER_UNSPECIFIED\x10\x00\x12\x13\n" +
+	"\x0fPROVIDER_GOOGLE\x10\x01\x12\x13\n" +
+	"\x0fPROVIDER_YANDEX\x10\x022\x96\f\n" +
+	"\vAuthService\x12\x8a\x02\n" +
+	"\fExchangeCode\x12(.sso.service.auth.v1.ExchangeCodeRequest\x1a).sso.service.auth.v1.ExchangeCodeResponse\"\xa4\x01\x92A\x84\x01\n" +
+	"\x04Auth\x127Обмен OAuth2 code на access/refresh токены\x1aCТребуются заголовки: X-Client-Id, X-Client-Secret\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/auth/exchange\x12\x9e\x02\n" +
+	"\vUserDetails\x12'.sso.service.auth.v1.UserDetailsRequest\x1a(.sso.service.auth.v1.UserDetailsResponse\"\xbb\x01\x92A\xa2\x01\n" +
 	"\x04Auth\x12CПолучение информации о пользователе\x1aCТребуется заголовок Authorization: Bearer <token>b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x0f\x12\r/v1/auth/user\x12\xe4\x01\n" +
-	"\fRefreshToken\x12 .sso.auth.v1.RefreshTokenRequest\x1a!.sso.auth.v1.RefreshTokenResponse\"\x8e\x01\x92Ap\n" +
-	"\x04Auth\x12#Обновление токенов\x1aCТребуются заголовки: X-Client-Id, X-Client-Secret\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/auth/refresh\x12\xb8\x01\n" +
-	"\x06Logout\x12\x1a.sso.auth.v1.LogoutRequest\x1a\x1b.sso.auth.v1.LogoutResponse\"u\x92AX\n" +
-	"\x04Auth\x12#Выход пользователя\x1a+Инвалидация refresh токена\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logout\x12\xd4\x01\n" +
-	"\x12RevokeRefreshToken\x12&.sso.auth.v1.RevokeRefreshTokenRequest\x1a'.sso.auth.v1.RevokeRefreshTokenResponse\"m\x92AP\n" +
-	"\x04Auth\x12HПринудительная инвалидация refresh токена\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/revokeB\xa0\x02\x92A\xf8\x01\x12\x92\x01\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x0f\x12\r/v1/auth/user\x12\xf4\x01\n" +
+	"\fRefreshToken\x12(.sso.service.auth.v1.RefreshTokenRequest\x1a).sso.service.auth.v1.RefreshTokenResponse\"\x8e\x01\x92Ap\n" +
+	"\x04Auth\x12#Обновление токенов\x1aCТребуются заголовки: X-Client-Id, X-Client-Secret\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/auth/refresh\x12\xc8\x01\n" +
+	"\x06Logout\x12\".sso.service.auth.v1.LogoutRequest\x1a#.sso.service.auth.v1.LogoutResponse\"u\x92AX\n" +
+	"\x04Auth\x12#Выход пользователя\x1a+Инвалидация refresh токена\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logout\x12\xe4\x01\n" +
+	"\x12RevokeRefreshToken\x12..sso.service.auth.v1.RevokeRefreshTokenRequest\x1a/.sso.service.auth.v1.RevokeRefreshTokenResponse\"m\x92AP\n" +
+	"\x04Auth\x12HПринудительная инвалидация refresh токена\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/revoke\x12\xaf\x02\n" +
+	"\x0eGetPermissions\x12*.sso.service.auth.v1.GetPermissionsRequest\x1a+.sso.service.auth.v1.GetPermissionsResponse\"\xc3\x01\x92A\xa3\x01\n" +
+	"\x04Auth\x12DПолучение списка permissions пользователя\x1aCТребуется заголовок Authorization: Bearer <token>b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/auth/permissionsB\xb2\x03\x92A\xf8\x01\x12\x92\x01\n" +
 	"\fSSO Auth API\x12}OAuth2 авторизация, обмен кодов, обновление токенов, получение профиля.2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
 	"8\n" +
 	"\n" +
-	"BearerAuth\x12*\b\x02\x12\x15Bearer <access_token>\x1a\rAuthorization \x02Z\"Salivare-DevHub/sso.auth.v1;authv1b\x06proto3"
+	"BearerAuth\x12*\b\x02\x12\x15Bearer <access_token>\x1a\rAuthorization \x02\n" +
+	"\x17com.sso.service.auth.v1B\tAuthProtoP\x01Z!sso/service/auth/v1;authservicev1\xa2\x02\x03SSA\xaa\x02\x13Sso.Service.Auth.V1\xca\x02\x13Sso\\Service\\Auth\\V1\xe2\x02\x1fSso\\Service\\Auth\\V1\\GPBMetadata\xea\x02\x16Sso::Service::Auth::V1b\x06proto3"
 
 var (
-	file_proto_sso_auth_v1_auth_proto_rawDescOnce sync.Once
-	file_proto_sso_auth_v1_auth_proto_rawDescData []byte
+	file_sso_service_auth_v1_auth_proto_rawDescOnce sync.Once
+	file_sso_service_auth_v1_auth_proto_rawDescData []byte
 )
 
-func file_proto_sso_auth_v1_auth_proto_rawDescGZIP() []byte {
-	file_proto_sso_auth_v1_auth_proto_rawDescOnce.Do(func() {
-		file_proto_sso_auth_v1_auth_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_sso_auth_v1_auth_proto_rawDesc), len(file_proto_sso_auth_v1_auth_proto_rawDesc)))
+func file_sso_service_auth_v1_auth_proto_rawDescGZIP() []byte {
+	file_sso_service_auth_v1_auth_proto_rawDescOnce.Do(func() {
+		file_sso_service_auth_v1_auth_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_sso_service_auth_v1_auth_proto_rawDesc), len(file_sso_service_auth_v1_auth_proto_rawDesc)))
 	})
-	return file_proto_sso_auth_v1_auth_proto_rawDescData
+	return file_sso_service_auth_v1_auth_proto_rawDescData
 }
 
-var file_proto_sso_auth_v1_auth_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_sso_auth_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
-var file_proto_sso_auth_v1_auth_proto_goTypes = []any{
-	(Provider)(0),                      // 0: sso.auth.v1.Provider
-	(*ExchangeCodeRequest)(nil),        // 1: sso.auth.v1.ExchangeCodeRequest
-	(*ExchangeCodeResponse)(nil),       // 2: sso.auth.v1.ExchangeCodeResponse
-	(*UserDetailsRequest)(nil),         // 3: sso.auth.v1.UserDetailsRequest
-	(*UserDetailsResponse)(nil),        // 4: sso.auth.v1.UserDetailsResponse
-	(*RefreshTokenRequest)(nil),        // 5: sso.auth.v1.RefreshTokenRequest
-	(*RefreshTokenResponse)(nil),       // 6: sso.auth.v1.RefreshTokenResponse
-	(*LogoutRequest)(nil),              // 7: sso.auth.v1.LogoutRequest
-	(*LogoutResponse)(nil),             // 8: sso.auth.v1.LogoutResponse
-	(*RevokeRefreshTokenRequest)(nil),  // 9: sso.auth.v1.RevokeRefreshTokenRequest
-	(*RevokeRefreshTokenResponse)(nil), // 10: sso.auth.v1.RevokeRefreshTokenResponse
+var file_sso_service_auth_v1_auth_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_sso_service_auth_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_sso_service_auth_v1_auth_proto_goTypes = []any{
+	(Provider)(0),                      // 0: sso.service.auth.v1.Provider
+	(*ExchangeCodeRequest)(nil),        // 1: sso.service.auth.v1.ExchangeCodeRequest
+	(*ExchangeCodeResponse)(nil),       // 2: sso.service.auth.v1.ExchangeCodeResponse
+	(*UserDetailsRequest)(nil),         // 3: sso.service.auth.v1.UserDetailsRequest
+	(*UserDetailsResponse)(nil),        // 4: sso.service.auth.v1.UserDetailsResponse
+	(*RefreshTokenRequest)(nil),        // 5: sso.service.auth.v1.RefreshTokenRequest
+	(*RefreshTokenResponse)(nil),       // 6: sso.service.auth.v1.RefreshTokenResponse
+	(*LogoutRequest)(nil),              // 7: sso.service.auth.v1.LogoutRequest
+	(*LogoutResponse)(nil),             // 8: sso.service.auth.v1.LogoutResponse
+	(*RevokeRefreshTokenRequest)(nil),  // 9: sso.service.auth.v1.RevokeRefreshTokenRequest
+	(*RevokeRefreshTokenResponse)(nil), // 10: sso.service.auth.v1.RevokeRefreshTokenResponse
+	(*Permission)(nil),                 // 11: sso.service.auth.v1.Permission
+	(*GetPermissionsRequest)(nil),      // 12: sso.service.auth.v1.GetPermissionsRequest
+	(*GetPermissionsResponse)(nil),     // 13: sso.service.auth.v1.GetPermissionsResponse
 }
-var file_proto_sso_auth_v1_auth_proto_depIdxs = []int32{
-	0,  // 0: sso.auth.v1.ExchangeCodeRequest.provider:type_name -> sso.auth.v1.Provider
-	1,  // 1: sso.auth.v1.Auth.ExchangeCode:input_type -> sso.auth.v1.ExchangeCodeRequest
-	3,  // 2: sso.auth.v1.Auth.UserDetails:input_type -> sso.auth.v1.UserDetailsRequest
-	5,  // 3: sso.auth.v1.Auth.RefreshToken:input_type -> sso.auth.v1.RefreshTokenRequest
-	7,  // 4: sso.auth.v1.Auth.Logout:input_type -> sso.auth.v1.LogoutRequest
-	9,  // 5: sso.auth.v1.Auth.RevokeRefreshToken:input_type -> sso.auth.v1.RevokeRefreshTokenRequest
-	2,  // 6: sso.auth.v1.Auth.ExchangeCode:output_type -> sso.auth.v1.ExchangeCodeResponse
-	4,  // 7: sso.auth.v1.Auth.UserDetails:output_type -> sso.auth.v1.UserDetailsResponse
-	6,  // 8: sso.auth.v1.Auth.RefreshToken:output_type -> sso.auth.v1.RefreshTokenResponse
-	8,  // 9: sso.auth.v1.Auth.Logout:output_type -> sso.auth.v1.LogoutResponse
-	10, // 10: sso.auth.v1.Auth.RevokeRefreshToken:output_type -> sso.auth.v1.RevokeRefreshTokenResponse
-	6,  // [6:11] is the sub-list for method output_type
-	1,  // [1:6] is the sub-list for method input_type
-	1,  // [1:1] is the sub-list for extension type_name
-	1,  // [1:1] is the sub-list for extension extendee
-	0,  // [0:1] is the sub-list for field type_name
+var file_sso_service_auth_v1_auth_proto_depIdxs = []int32{
+	0,  // 0: sso.service.auth.v1.ExchangeCodeRequest.provider:type_name -> sso.service.auth.v1.Provider
+	11, // 1: sso.service.auth.v1.GetPermissionsResponse.permissions:type_name -> sso.service.auth.v1.Permission
+	1,  // 2: sso.service.auth.v1.AuthService.ExchangeCode:input_type -> sso.service.auth.v1.ExchangeCodeRequest
+	3,  // 3: sso.service.auth.v1.AuthService.UserDetails:input_type -> sso.service.auth.v1.UserDetailsRequest
+	5,  // 4: sso.service.auth.v1.AuthService.RefreshToken:input_type -> sso.service.auth.v1.RefreshTokenRequest
+	7,  // 5: sso.service.auth.v1.AuthService.Logout:input_type -> sso.service.auth.v1.LogoutRequest
+	9,  // 6: sso.service.auth.v1.AuthService.RevokeRefreshToken:input_type -> sso.service.auth.v1.RevokeRefreshTokenRequest
+	12, // 7: sso.service.auth.v1.AuthService.GetPermissions:input_type -> sso.service.auth.v1.GetPermissionsRequest
+	2,  // 8: sso.service.auth.v1.AuthService.ExchangeCode:output_type -> sso.service.auth.v1.ExchangeCodeResponse
+	4,  // 9: sso.service.auth.v1.AuthService.UserDetails:output_type -> sso.service.auth.v1.UserDetailsResponse
+	6,  // 10: sso.service.auth.v1.AuthService.RefreshToken:output_type -> sso.service.auth.v1.RefreshTokenResponse
+	8,  // 11: sso.service.auth.v1.AuthService.Logout:output_type -> sso.service.auth.v1.LogoutResponse
+	10, // 12: sso.service.auth.v1.AuthService.RevokeRefreshToken:output_type -> sso.service.auth.v1.RevokeRefreshTokenResponse
+	13, // 13: sso.service.auth.v1.AuthService.GetPermissions:output_type -> sso.service.auth.v1.GetPermissionsResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_proto_sso_auth_v1_auth_proto_init() }
-func file_proto_sso_auth_v1_auth_proto_init() {
-	if File_proto_sso_auth_v1_auth_proto != nil {
+func init() { file_sso_service_auth_v1_auth_proto_init() }
+func file_sso_service_auth_v1_auth_proto_init() {
+	if File_sso_service_auth_v1_auth_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_sso_auth_v1_auth_proto_rawDesc), len(file_proto_sso_auth_v1_auth_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sso_service_auth_v1_auth_proto_rawDesc), len(file_sso_service_auth_v1_auth_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   10,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_sso_auth_v1_auth_proto_goTypes,
-		DependencyIndexes: file_proto_sso_auth_v1_auth_proto_depIdxs,
-		EnumInfos:         file_proto_sso_auth_v1_auth_proto_enumTypes,
-		MessageInfos:      file_proto_sso_auth_v1_auth_proto_msgTypes,
+		GoTypes:           file_sso_service_auth_v1_auth_proto_goTypes,
+		DependencyIndexes: file_sso_service_auth_v1_auth_proto_depIdxs,
+		EnumInfos:         file_sso_service_auth_v1_auth_proto_enumTypes,
+		MessageInfos:      file_sso_service_auth_v1_auth_proto_msgTypes,
 	}.Build()
-	File_proto_sso_auth_v1_auth_proto = out.File
-	file_proto_sso_auth_v1_auth_proto_goTypes = nil
-	file_proto_sso_auth_v1_auth_proto_depIdxs = nil
+	File_sso_service_auth_v1_auth_proto = out.File
+	file_sso_service_auth_v1_auth_proto_goTypes = nil
+	file_sso_service_auth_v1_auth_proto_depIdxs = nil
 }

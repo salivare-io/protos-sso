@@ -1,32 +1,31 @@
 syntax = "proto3";
 
-package sso.auth.v1;
-
-option go_package = "Salivare-DevHub/sso.auth.v1;authv1";
+package sso.service.auth.v1;
 
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
+option go_package = "sso/service/auth/v1;authservicev1";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "SSO Auth API";
-    version: "1.0";
-    description: "OAuth2 авторизация, обмен кодов, обновление токенов, получение профиля.";
-  };
+    title: "SSO Auth API"
+    version: "1.0"
+    description: "OAuth2 авторизация, обмен кодов, обновление токенов, получение профиля."
+  }
 
-  schemes: HTTPS;
-  consumes: "application/json";
-  produces: "application/json";
+  schemes: HTTPS
+  consumes: "application/json"
+  produces: "application/json"
 
   // Security схема для Authorization: Bearer <token>
   security_definitions: {
     security: {
-      key: "BearerAuth";
+      key: "BearerAuth"
       value: {
-        type: TYPE_API_KEY;
-        in: IN_HEADER;
-        name: "Authorization";
-        description: "Bearer <access_token>";
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+        description: "Bearer <access_token>"
       }
     }
   }
@@ -34,11 +33,11 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 enum Provider {
   PROVIDER_UNSPECIFIED = 0;
-  GOOGLE = 1;
-  YANDEX = 2;
+  PROVIDER_GOOGLE = 1;
+  PROVIDER_YANDEX = 2;
 }
 
-service Auth {
+service AuthService {
   rpc ExchangeCode(ExchangeCodeRequest) returns (ExchangeCodeResponse) {
     option (google.api.http) = {
       post: "/v1/auth/exchange"
@@ -46,25 +45,21 @@ service Auth {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Обмен OAuth2 code на access/refresh токены";
-      description: "Требуются заголовки: X-Client-Id, X-Client-Secret";
-      tags: "Auth";
+      summary: "Обмен OAuth2 code на access/refresh токены"
+      description: "Требуются заголовки: X-Client-Id, X-Client-Secret"
+      tags: "Auth"
     };
   }
 
   rpc UserDetails(UserDetailsRequest) returns (UserDetailsResponse) {
-    option (google.api.http) = {
-      get: "/v1/auth/user"
-    };
+    option (google.api.http) = {get: "/v1/auth/user"};
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Получение информации о пользователе";
-      description: "Требуется заголовок Authorization: Bearer <token>";
-      tags: "Auth";
+      summary: "Получение информации о пользователе"
+      description: "Требуется заголовок Authorization: Bearer <token>"
+      tags: "Auth"
       security: {
-        security_requirement: {
-          key: "BearerAuth";
-        }
+        security_requirement: {key: "BearerAuth"}
       }
     };
   }
@@ -76,9 +71,9 @@ service Auth {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Обновление токенов";
-      description: "Требуются заголовки: X-Client-Id, X-Client-Secret";
-      tags: "Auth";
+      summary: "Обновление токенов"
+      description: "Требуются заголовки: X-Client-Id, X-Client-Secret"
+      tags: "Auth"
     };
   }
 
@@ -89,9 +84,9 @@ service Auth {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Выход пользователя";
-      description: "Инвалидация refresh токена";
-      tags: "Auth";
+      summary: "Выход пользователя"
+      description: "Инвалидация refresh токена"
+      tags: "Auth"
     };
   }
 
@@ -102,8 +97,21 @@ service Auth {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Принудительная инвалидация refresh токена";
-      tags: "Auth";
+      summary: "Принудительная инвалидация refresh токена"
+      tags: "Auth"
+    };
+  }
+
+  rpc GetPermissions(GetPermissionsRequest) returns (GetPermissionsResponse) {
+    option (google.api.http) = {get: "/v1/auth/permissions"};
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение списка permissions пользователя"
+      description: "Требуется заголовок Authorization: Bearer <token>"
+      tags: "Auth"
+      security: {
+        security_requirement: {key: "BearerAuth"}
+      }
     };
   }
 }
@@ -148,3 +156,16 @@ message RevokeRefreshTokenRequest {
 }
 
 message RevokeRefreshTokenResponse {}
+
+message Permission {
+  string code = 1;
+  string description = 2;
+}
+
+message GetPermissionsRequest {
+  string access_token = 1;
+}
+
+message GetPermissionsResponse {
+  repeated Permission permissions = 1;
+}

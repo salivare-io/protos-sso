@@ -16,9 +16,16 @@ plugins:
   - remote: buf.build/connectrpc/go
     out: gen/go
 
-  # OpenAPI v2 (Swagger)
+  # OpenAPI v2 (Swagger) — SSO
   - remote: buf.build/grpc-ecosystem/openapiv2
-    out: gen/openapi
+    out: gen/openapi/sso
     opt:
       - allow_merge=true
       - merge_file_name=sso_auth
+
+  # OpenAPI v2 (Swagger) — API
+  - remote: buf.build/grpc-ecosystem/openapiv2
+    out: gen/openapi/api
+    opt:
+      - allow_merge=true
+      - merge_file_name=api_auth
