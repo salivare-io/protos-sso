@@ -8,8 +8,8 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
+	v1 "github.com/Salivare-DevHub/protos-sso/gen/go/sso/service/auth/v1"
 	http "net/http"
-	v1 "sso/service/auth/v1"
 	strings "strings"
 )
 
