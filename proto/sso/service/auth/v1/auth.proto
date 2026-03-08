@@ -5,7 +5,7 @@ package sso.service.auth.v1;
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/Salivare-DevHub/protos-sso/gen/go/sso/service/auth/v1;authservicev1";
+option go_package = "github.com/salivare-io/protos-sso/gen/go/sso/service/auth/v1;authservicev1";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {

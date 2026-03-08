@@ -664,12 +664,12 @@ const file_sso_api_auth_v1_auth_proto_rawDesc = "" +
 	"\bAuth API\x12+Получение списка permissions\x1a7Backend вызывает SSO.AuthService.GetPermissionsb\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/api/auth/permissionsB\xe2\x03\x92A\x97\x02\x12\xb1\x01\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/api/auth/permissionsB\xde\x03\x92A\x97\x02\x12\xb1\x01\n" +
 	"\x11Frontend Auth API\x12\x96\x01API для фронтенда. Backend проксирует запросы в SSO и возвращает токены, профиль и permissions.2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
 	"8\n" +
 	"\n" +
 	"BearerAuth\x12*\b\x02\x12\x15Bearer <access_token>\x1a\rAuthorization \x02\n" +
-	"\x13com.sso.api.auth.v1B\tAuthProtoP\x01ZFgithub.com/Salivare-DevHub/protos-sso/gen/go/sso/api/auth/v1;apiauthv1\xa2\x02\x03SAA\xaa\x02\x0fSso.Api.Auth.V1\xca\x02\x0fSso\\Api\\Auth\\V1\xe2\x02\x1bSso\\Api\\Auth\\V1\\GPBMetadata\xea\x02\x12Sso::Api::Auth::V1b\x06proto3"
+	"\x13com.sso.api.auth.v1B\tAuthProtoP\x01ZBgithub.com/salivare-io/protos-sso/gen/go/sso/api/auth/v1;apiauthv1\xa2\x02\x03SAA\xaa\x02\x0fSso.Api.Auth.V1\xca\x02\x0fSso\\Api\\Auth\\V1\xe2\x02\x1bSso\\Api\\Auth\\V1\\GPBMetadata\xea\x02\x12Sso::Api::Auth::V1b\x06proto3"
 
 var (
 	file_sso_api_auth_v1_auth_proto_rawDescOnce sync.Once
