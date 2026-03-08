@@ -8,8 +8,8 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
+	v1 "github.com/salivare-io/protos-sso/gen/go/sso/api/auth/v1"
 	http "net/http"
-	salivare_io_sso_api_v1 "salivare-io.sso.api.v1"
 	strings "strings"
 )
 
@@ -54,12 +54,12 @@ const (
 
 // AuthApiServiceClient is a client for the sso.api.auth.v1.AuthApiService service.
 type AuthApiServiceClient interface {
-	ExchangeCode(context.Context, *connect.Request[salivare_io_sso_api_v1.ExchangeCodeRequest]) (*connect.Response[salivare_io_sso_api_v1.ExchangeCodeResponse], error)
-	RefreshToken(context.Context, *connect.Request[salivare_io_sso_api_v1.RefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RefreshTokenResponse], error)
-	Logout(context.Context, *connect.Request[salivare_io_sso_api_v1.LogoutRequest]) (*connect.Response[salivare_io_sso_api_v1.LogoutResponse], error)
-	RevokeRefreshToken(context.Context, *connect.Request[salivare_io_sso_api_v1.RevokeRefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RevokeRefreshTokenResponse], error)
-	GetProfile(context.Context, *connect.Request[salivare_io_sso_api_v1.GetProfileRequest]) (*connect.Response[salivare_io_sso_api_v1.GetProfileResponse], error)
-	GetPermissions(context.Context, *connect.Request[salivare_io_sso_api_v1.GetPermissionsRequest]) (*connect.Response[salivare_io_sso_api_v1.GetPermissionsResponse], error)
+	ExchangeCode(context.Context, *connect.Request[v1.ExchangeCodeRequest]) (*connect.Response[v1.ExchangeCodeResponse], error)
+	RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error)
+	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
+	RevokeRefreshToken(context.Context, *connect.Request[v1.RevokeRefreshTokenRequest]) (*connect.Response[v1.RevokeRefreshTokenResponse], error)
+	GetProfile(context.Context, *connect.Request[v1.GetProfileRequest]) (*connect.Response[v1.GetProfileResponse], error)
+	GetPermissions(context.Context, *connect.Request[v1.GetPermissionsRequest]) (*connect.Response[v1.GetPermissionsResponse], error)
 }
 
 // NewAuthApiServiceClient constructs a client for the sso.api.auth.v1.AuthApiService service. By
@@ -71,39 +71,39 @@ type AuthApiServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewAuthApiServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthApiServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	authApiServiceMethods := salivare_io_sso_api_v1.File_sso_api_auth_v1_auth_proto.Services().ByName("AuthApiService").Methods()
+	authApiServiceMethods := v1.File_sso_api_auth_v1_auth_proto.Services().ByName("AuthApiService").Methods()
 	return &authApiServiceClient{
-		exchangeCode: connect.NewClient[salivare_io_sso_api_v1.ExchangeCodeRequest, salivare_io_sso_api_v1.ExchangeCodeResponse](
+		exchangeCode: connect.NewClient[v1.ExchangeCodeRequest, v1.ExchangeCodeResponse](
 			httpClient,
 			baseURL+AuthApiServiceExchangeCodeProcedure,
 			connect.WithSchema(authApiServiceMethods.ByName("ExchangeCode")),
 			connect.WithClientOptions(opts...),
 		),
-		refreshToken: connect.NewClient[salivare_io_sso_api_v1.RefreshTokenRequest, salivare_io_sso_api_v1.RefreshTokenResponse](
+		refreshToken: connect.NewClient[v1.RefreshTokenRequest, v1.RefreshTokenResponse](
 			httpClient,
 			baseURL+AuthApiServiceRefreshTokenProcedure,
 			connect.WithSchema(authApiServiceMethods.ByName("RefreshToken")),
 			connect.WithClientOptions(opts...),
 		),
-		logout: connect.NewClient[salivare_io_sso_api_v1.LogoutRequest, salivare_io_sso_api_v1.LogoutResponse](
+		logout: connect.NewClient[v1.LogoutRequest, v1.LogoutResponse](
 			httpClient,
 			baseURL+AuthApiServiceLogoutProcedure,
 			connect.WithSchema(authApiServiceMethods.ByName("Logout")),
 			connect.WithClientOptions(opts...),
 		),
-		revokeRefreshToken: connect.NewClient[salivare_io_sso_api_v1.RevokeRefreshTokenRequest, salivare_io_sso_api_v1.RevokeRefreshTokenResponse](
+		revokeRefreshToken: connect.NewClient[v1.RevokeRefreshTokenRequest, v1.RevokeRefreshTokenResponse](
 			httpClient,
 			baseURL+AuthApiServiceRevokeRefreshTokenProcedure,
 			connect.WithSchema(authApiServiceMethods.ByName("RevokeRefreshToken")),
 			connect.WithClientOptions(opts...),
 		),
-		getProfile: connect.NewClient[salivare_io_sso_api_v1.GetProfileRequest, salivare_io_sso_api_v1.GetProfileResponse](
+		getProfile: connect.NewClient[v1.GetProfileRequest, v1.GetProfileResponse](
 			httpClient,
 			baseURL+AuthApiServiceGetProfileProcedure,
 			connect.WithSchema(authApiServiceMethods.ByName("GetProfile")),
 			connect.WithClientOptions(opts...),
 		),
-		getPermissions: connect.NewClient[salivare_io_sso_api_v1.GetPermissionsRequest, salivare_io_sso_api_v1.GetPermissionsResponse](
+		getPermissions: connect.NewClient[v1.GetPermissionsRequest, v1.GetPermissionsResponse](
 			httpClient,
 			baseURL+AuthApiServiceGetPermissionsProcedure,
 			connect.WithSchema(authApiServiceMethods.ByName("GetPermissions")),
@@ -114,52 +114,52 @@ func NewAuthApiServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 
 // authApiServiceClient implements AuthApiServiceClient.
 type authApiServiceClient struct {
-	exchangeCode       *connect.Client[salivare_io_sso_api_v1.ExchangeCodeRequest, salivare_io_sso_api_v1.ExchangeCodeResponse]
-	refreshToken       *connect.Client[salivare_io_sso_api_v1.RefreshTokenRequest, salivare_io_sso_api_v1.RefreshTokenResponse]
-	logout             *connect.Client[salivare_io_sso_api_v1.LogoutRequest, salivare_io_sso_api_v1.LogoutResponse]
-	revokeRefreshToken *connect.Client[salivare_io_sso_api_v1.RevokeRefreshTokenRequest, salivare_io_sso_api_v1.RevokeRefreshTokenResponse]
-	getProfile         *connect.Client[salivare_io_sso_api_v1.GetProfileRequest, salivare_io_sso_api_v1.GetProfileResponse]
-	getPermissions     *connect.Client[salivare_io_sso_api_v1.GetPermissionsRequest, salivare_io_sso_api_v1.GetPermissionsResponse]
+	exchangeCode       *connect.Client[v1.ExchangeCodeRequest, v1.ExchangeCodeResponse]
+	refreshToken       *connect.Client[v1.RefreshTokenRequest, v1.RefreshTokenResponse]
+	logout             *connect.Client[v1.LogoutRequest, v1.LogoutResponse]
+	revokeRefreshToken *connect.Client[v1.RevokeRefreshTokenRequest, v1.RevokeRefreshTokenResponse]
+	getProfile         *connect.Client[v1.GetProfileRequest, v1.GetProfileResponse]
+	getPermissions     *connect.Client[v1.GetPermissionsRequest, v1.GetPermissionsResponse]
 }
 
 // ExchangeCode calls sso.api.auth.v1.AuthApiService.ExchangeCode.
-func (c *authApiServiceClient) ExchangeCode(ctx context.Context, req *connect.Request[salivare_io_sso_api_v1.ExchangeCodeRequest]) (*connect.Response[salivare_io_sso_api_v1.ExchangeCodeResponse], error) {
+func (c *authApiServiceClient) ExchangeCode(ctx context.Context, req *connect.Request[v1.ExchangeCodeRequest]) (*connect.Response[v1.ExchangeCodeResponse], error) {
 	return c.exchangeCode.CallUnary(ctx, req)
 }
 
 // RefreshToken calls sso.api.auth.v1.AuthApiService.RefreshToken.
-func (c *authApiServiceClient) RefreshToken(ctx context.Context, req *connect.Request[salivare_io_sso_api_v1.RefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RefreshTokenResponse], error) {
+func (c *authApiServiceClient) RefreshToken(ctx context.Context, req *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error) {
 	return c.refreshToken.CallUnary(ctx, req)
 }
 
 // Logout calls sso.api.auth.v1.AuthApiService.Logout.
-func (c *authApiServiceClient) Logout(ctx context.Context, req *connect.Request[salivare_io_sso_api_v1.LogoutRequest]) (*connect.Response[salivare_io_sso_api_v1.LogoutResponse], error) {
+func (c *authApiServiceClient) Logout(ctx context.Context, req *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
 	return c.logout.CallUnary(ctx, req)
 }
 
 // RevokeRefreshToken calls sso.api.auth.v1.AuthApiService.RevokeRefreshToken.
-func (c *authApiServiceClient) RevokeRefreshToken(ctx context.Context, req *connect.Request[salivare_io_sso_api_v1.RevokeRefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RevokeRefreshTokenResponse], error) {
+func (c *authApiServiceClient) RevokeRefreshToken(ctx context.Context, req *connect.Request[v1.RevokeRefreshTokenRequest]) (*connect.Response[v1.RevokeRefreshTokenResponse], error) {
 	return c.revokeRefreshToken.CallUnary(ctx, req)
 }
 
 // GetProfile calls sso.api.auth.v1.AuthApiService.GetProfile.
-func (c *authApiServiceClient) GetProfile(ctx context.Context, req *connect.Request[salivare_io_sso_api_v1.GetProfileRequest]) (*connect.Response[salivare_io_sso_api_v1.GetProfileResponse], error) {
+func (c *authApiServiceClient) GetProfile(ctx context.Context, req *connect.Request[v1.GetProfileRequest]) (*connect.Response[v1.GetProfileResponse], error) {
 	return c.getProfile.CallUnary(ctx, req)
 }
 
 // GetPermissions calls sso.api.auth.v1.AuthApiService.GetPermissions.
-func (c *authApiServiceClient) GetPermissions(ctx context.Context, req *connect.Request[salivare_io_sso_api_v1.GetPermissionsRequest]) (*connect.Response[salivare_io_sso_api_v1.GetPermissionsResponse], error) {
+func (c *authApiServiceClient) GetPermissions(ctx context.Context, req *connect.Request[v1.GetPermissionsRequest]) (*connect.Response[v1.GetPermissionsResponse], error) {
 	return c.getPermissions.CallUnary(ctx, req)
 }
 
 // AuthApiServiceHandler is an implementation of the sso.api.auth.v1.AuthApiService service.
 type AuthApiServiceHandler interface {
-	ExchangeCode(context.Context, *connect.Request[salivare_io_sso_api_v1.ExchangeCodeRequest]) (*connect.Response[salivare_io_sso_api_v1.ExchangeCodeResponse], error)
-	RefreshToken(context.Context, *connect.Request[salivare_io_sso_api_v1.RefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RefreshTokenResponse], error)
-	Logout(context.Context, *connect.Request[salivare_io_sso_api_v1.LogoutRequest]) (*connect.Response[salivare_io_sso_api_v1.LogoutResponse], error)
-	RevokeRefreshToken(context.Context, *connect.Request[salivare_io_sso_api_v1.RevokeRefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RevokeRefreshTokenResponse], error)
-	GetProfile(context.Context, *connect.Request[salivare_io_sso_api_v1.GetProfileRequest]) (*connect.Response[salivare_io_sso_api_v1.GetProfileResponse], error)
-	GetPermissions(context.Context, *connect.Request[salivare_io_sso_api_v1.GetPermissionsRequest]) (*connect.Response[salivare_io_sso_api_v1.GetPermissionsResponse], error)
+	ExchangeCode(context.Context, *connect.Request[v1.ExchangeCodeRequest]) (*connect.Response[v1.ExchangeCodeResponse], error)
+	RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error)
+	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
+	RevokeRefreshToken(context.Context, *connect.Request[v1.RevokeRefreshTokenRequest]) (*connect.Response[v1.RevokeRefreshTokenResponse], error)
+	GetProfile(context.Context, *connect.Request[v1.GetProfileRequest]) (*connect.Response[v1.GetProfileResponse], error)
+	GetPermissions(context.Context, *connect.Request[v1.GetPermissionsRequest]) (*connect.Response[v1.GetPermissionsResponse], error)
 }
 
 // NewAuthApiServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -168,7 +168,7 @@ type AuthApiServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewAuthApiServiceHandler(svc AuthApiServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	authApiServiceMethods := salivare_io_sso_api_v1.File_sso_api_auth_v1_auth_proto.Services().ByName("AuthApiService").Methods()
+	authApiServiceMethods := v1.File_sso_api_auth_v1_auth_proto.Services().ByName("AuthApiService").Methods()
 	authApiServiceExchangeCodeHandler := connect.NewUnaryHandler(
 		AuthApiServiceExchangeCodeProcedure,
 		svc.ExchangeCode,
@@ -228,26 +228,26 @@ func NewAuthApiServiceHandler(svc AuthApiServiceHandler, opts ...connect.Handler
 // UnimplementedAuthApiServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedAuthApiServiceHandler struct{}
 
-func (UnimplementedAuthApiServiceHandler) ExchangeCode(context.Context, *connect.Request[salivare_io_sso_api_v1.ExchangeCodeRequest]) (*connect.Response[salivare_io_sso_api_v1.ExchangeCodeResponse], error) {
+func (UnimplementedAuthApiServiceHandler) ExchangeCode(context.Context, *connect.Request[v1.ExchangeCodeRequest]) (*connect.Response[v1.ExchangeCodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sso.api.auth.v1.AuthApiService.ExchangeCode is not implemented"))
 }
 
-func (UnimplementedAuthApiServiceHandler) RefreshToken(context.Context, *connect.Request[salivare_io_sso_api_v1.RefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RefreshTokenResponse], error) {
+func (UnimplementedAuthApiServiceHandler) RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sso.api.auth.v1.AuthApiService.RefreshToken is not implemented"))
 }
 
-func (UnimplementedAuthApiServiceHandler) Logout(context.Context, *connect.Request[salivare_io_sso_api_v1.LogoutRequest]) (*connect.Response[salivare_io_sso_api_v1.LogoutResponse], error) {
+func (UnimplementedAuthApiServiceHandler) Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sso.api.auth.v1.AuthApiService.Logout is not implemented"))
 }
 
-func (UnimplementedAuthApiServiceHandler) RevokeRefreshToken(context.Context, *connect.Request[salivare_io_sso_api_v1.RevokeRefreshTokenRequest]) (*connect.Response[salivare_io_sso_api_v1.RevokeRefreshTokenResponse], error) {
+func (UnimplementedAuthApiServiceHandler) RevokeRefreshToken(context.Context, *connect.Request[v1.RevokeRefreshTokenRequest]) (*connect.Response[v1.RevokeRefreshTokenResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sso.api.auth.v1.AuthApiService.RevokeRefreshToken is not implemented"))
 }
 
-func (UnimplementedAuthApiServiceHandler) GetProfile(context.Context, *connect.Request[salivare_io_sso_api_v1.GetProfileRequest]) (*connect.Response[salivare_io_sso_api_v1.GetProfileResponse], error) {
+func (UnimplementedAuthApiServiceHandler) GetProfile(context.Context, *connect.Request[v1.GetProfileRequest]) (*connect.Response[v1.GetProfileResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sso.api.auth.v1.AuthApiService.GetProfile is not implemented"))
 }
 
-func (UnimplementedAuthApiServiceHandler) GetPermissions(context.Context, *connect.Request[salivare_io_sso_api_v1.GetPermissionsRequest]) (*connect.Response[salivare_io_sso_api_v1.GetPermissionsResponse], error) {
+func (UnimplementedAuthApiServiceHandler) GetPermissions(context.Context, *connect.Request[v1.GetPermissionsRequest]) (*connect.Response[v1.GetPermissionsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("sso.api.auth.v1.AuthApiService.GetPermissions is not implemented"))
 }
