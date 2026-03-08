@@ -734,12 +734,12 @@ const file_sso_service_auth_v1_auth_proto_rawDesc = "" +
 	"\x04Auth\x12DПолучение списка permissions пользователя\x1aCТребуется заголовок Authorization: Bearer <token>b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/auth/permissionsB\xdb\x03\x92A\xf8\x01\x12\x92\x01\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/auth/permissionsB\xb9\x03\x92A\xf8\x01\x12\x92\x01\n" +
 	"\fSSO Auth API\x12}OAuth2 авторизация, обмен кодов, обновление токенов, получение профиля.2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
 	"8\n" +
 	"\n" +
 	"BearerAuth\x12*\b\x02\x12\x15Bearer <access_token>\x1a\rAuthorization \x02\n" +
-	"\x17com.sso.service.auth.v1B\tAuthProtoP\x01ZJgithub.com/salivare-io/protos-sso/gen/go/sso/service/auth/v1;authservicev1\xa2\x02\x03SSA\xaa\x02\x13Sso.Service.Auth.V1\xca\x02\x13Sso\\Service\\Auth\\V1\xe2\x02\x1fSso\\Service\\Auth\\V1\\GPBMetadata\xea\x02\x16Sso::Service::Auth::V1b\x06proto3"
+	"\x17com.sso.service.auth.v1B\tAuthProtoP\x01Z(salivare-io.sso.service.v1;authservicev1\xa2\x02\x03SSA\xaa\x02\x13Sso.Service.Auth.V1\xca\x02\x13Sso\\Service\\Auth\\V1\xe2\x02\x1fSso\\Service\\Auth\\V1\\GPBMetadata\xea\x02\x16Sso::Service::Auth::V1b\x06proto3"
 
 var (
 	file_sso_service_auth_v1_auth_proto_rawDescOnce sync.Once
