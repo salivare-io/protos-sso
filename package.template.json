@@ -1,0 +1,19 @@
+{
+  "name": "@salivare-io/sso-api",
+  "version": "0.0.10-dev",
+  "description": "Generated protobuf TS client for SSO API",
+  "main": "auth/v1/auth_connect.js",
+  "types": "auth/v1/auth_pb.d.ts",
+  "files": [
+    "auth"
+  ],
+  "license": "MIT",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salivare-io/protos-sso.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

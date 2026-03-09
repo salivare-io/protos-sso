@@ -11,6 +11,110 @@ tasks:
 
       - docker run --rm -v {{.PWD}}:/workspace protos-sso-gen buf generate --template buf.gen.ts.yaml --path proto/sso/api
 
+  ts:build-pack:
+    desc: Build TypeScript, copy package.template.json into ARTIFACT_DIR and npm pack as host user
+    dir: .
+    env:
+      PKG_DIR: "gen/ts/sso/api/auth/v1"
+      TMP_BUILD: ".tmp_build"
+      TEMPLATE_PATH: "./package.template.json"
+    cmds:
+      - docker build -t protos-sso-publish -f DockerfilePublish .
+      - |
+        : "${PKG_DIR:=gen/ts/sso/api/auth/v1}"
+        : "${TEMPLATE_PATH:=pnpm/ssov1/package.template.json}"
+        ARTIFACT_DIR="${PKG_DIR}/.artifacts"
+        TMP_BUILD="${TMP_BUILD:-.tmp_build}"
+
+        mkdir -p "${ARTIFACT_DIR}"
+        rm -rf "${TMP_BUILD}" || true
+        mkdir -p "${TMP_BUILD}"
+
+        # build inside container into temporary folder
+        docker run --rm --entrypoint sh -v {{.PWD}}:/workspace -w /workspace protos-sso-publish -c \
+          'set -eux; rm -rf /workspace/.tmp_build || true; mkdir -p /workspace/.tmp_build; command -v tsc || echo "no tsc in image"; tsc --project /workspace/tsconfig.build.json --outDir /workspace/.tmp_build --listFiles > /workspace/.tmp_build/tsc.stdout 2> /workspace/.tmp_build/tsc.stderr || true'
+
+        # copy compiled files into artifact dir
+        if [ -d "${TMP_BUILD}" ]; then
+          cp -r "${TMP_BUILD}/." "${ARTIFACT_DIR}/" 2>/dev/null || true
+        fi
+
+        # copy package template into artifact (preferred)
+        if [ -f "${TEMPLATE_PATH}" ]; then
+          cp -f "${TEMPLATE_PATH}" "${ARTIFACT_DIR}/package.json"
+        elif [ -f "${PKG_DIR}/package.json" ]; then
+          cp -f "${PKG_DIR}/package.json" "${ARTIFACT_DIR}/package.json"
+        elif [ -f "./package.json" ]; then
+          cp -f "./package.json" "${ARTIFACT_DIR}/package.json"
+        else
+          SAFE_NAME="$(echo "${PKG_DIR}" | sed 's|/|-|g' | sed 's|^gen-||' | sed 's|[^a-zA-Z0-9._-]|-|g' | tr '[:upper:]' '[:lower:]')"
+          printf '%s\n' "{ \"name\": \"${SAFE_NAME}\", \"version\": \"0.0.0\", \"main\": \"index.js\", \"types\": \"index.d.ts\" }" > "${ARTIFACT_DIR}/package.json"
+        fi
+
+        # ensure ownership so files belong to host user
+        HOST_UID="$(id -u)"; HOST_GID="$(id -g)"
+        docker run --rm -v {{.PWD}}:/workspace -w /workspace protos-sso-publish \
+          sh -c "chown -R ${HOST_UID}:${HOST_GID} /workspace/${ARTIFACT_DIR} || true"
+
+        # pack as host user
+        docker run --rm -v {{.PWD}}:/workspace -w /workspace/"${ARTIFACT_DIR}" --user "$(id -u):$(id -g)" protos-sso-publish \
+          sh -c "set -eux; npm pack --silent || true"
+
+        rm -rf "${TMP_BUILD}" || true
+    silent: false
+
+
+  ts:publish:
+    desc: Publish generated package to npm using protos-sso-publish. Requires NPM_TOKEN.
+    env:
+      NPM_TOKEN: ""
+      NPM_REGISTRY: "https://registry.npmjs.org/"
+      PKG_DIR: "gen/ts/sso/api"
+    cmds:
+      - docker build -t protos-sso-publish -f DockerfilePublish .
+      - |
+        : "${PKG_DIR:=gen/ts/sso/api}"
+        : "${NPM_REGISTRY:=https://registry.npmjs.org/}"
+        # NPM_TOKEN must be provided either via env or task invocation
+        if [ -z "${NPM_TOKEN}" ]; then
+          echo "ERROR: NPM_TOKEN is required for ts:publish"; exit 2;
+        fi
+        echo "Publishing from ${PKG_DIR} to ${NPM_REGISTRY}"
+      - |
+        docker run --rm -v {{.PWD}}:/workspace -w /workspace/${PKG_DIR} \
+          -e NPM_TOKEN -e NPM_REGISTRY protos-sso-publish \
+          "set -eux;
+           pnpm -v;
+           pnpm install --frozen-lockfile || true;
+           echo \"registry=${NPM_REGISTRY}\" > /root/.npmrc;
+           if [ \"${NPM_REGISTRY}\" = \"https://registry.npmjs.org/\" ]; then
+             echo \"//registry.npmjs.org/:_authToken=\${NPM_TOKEN}\" >> /root/.npmrc;
+           else
+             echo \"//\$(echo ${NPM_REGISTRY} | sed -e 's#^https\?://##'):_authToken=\${NPM_TOKEN}\" >> /root/.npmrc || true;
+           fi
+           pnpm publish --registry ${NPM_REGISTRY} --access public --no-git-checks
+          "
+    silent: false
+
+  gen-build-publish:
+    desc: Run gen -> ts:pack -> ts:publish by calling existing tasks. Pass PKG_DIR and NPM_TOKEN via env.
+    env:
+      NPM_TOKEN: ""
+      NPM_REGISTRY: "https://registry.npmjs.org/"
+      PKG_DIR: "gen/ts/sso/api"
+    cmds:
+      - |
+        : "${PKG_DIR:=gen/ts/sso/api}"
+        : "${NPM_REGISTRY:=https://registry.npmjs.org/}"
+        echo "publish-all: PKG_DIR=${PKG_DIR} NPM_REGISTRY=${NPM_REGISTRY}"
+        if [ -z "${NPM_TOKEN}" ]; then
+          echo "WARNING: NPM_TOKEN not set. ts:publish will fail if token is required."
+        fi
+      - task gen
+      - task ts:pack
+      - task ts:publish
+    silent: false
+
   lint:
     cmds:
       - buf lint proto
@@ -18,3 +122,47 @@ tasks:
   deps:
     cmds:
       - buf mod update proto
+
+  help:
+    desc: Show usage for all tasks
+    cmds:
+      - |
+        cat <<'EOF'
+        Tasks:
+          - gen: Generate code (go, ts, openapi) via Docker.
+          - ts:build-pack: Build TypeScript, copy package.template.json into ARTIFACT_DIR and create npm package (.tgz).
+          - ts:publish: Publish generated package to npm (requires NPM_TOKEN).
+          - gen-build-publish: Run gen -> ts:build-pack -> ts:publish (convenience wrapper).
+          - lint: Run buf lint on proto.
+          - deps: Run buf mod update on proto.
+
+        Usage examples:
+          # generate code
+          task gen
+
+          # build and pack a specific package
+          PKG_DIR=gen/ts/sso/api/auth/v1 task -f ts:build-pack
+
+          # publish (requires NPM_TOKEN)
+          NPM_TOKEN=xxx PKG_DIR=gen/ts/sso/api task -f ts:publish
+
+          # full flow: generate, build/pack, publish
+          NPM_TOKEN=xxx PKG_DIR=gen/ts/sso/api task -f gen-build-publish
+
+        Important variables:
+          - PKG_DIR: directory with generated TS package (default: gen/ts/sso/api)
+          - ARTIFACT_DIR: computed as ${PKG_DIR}/.artifacts inside tasks
+          - TEMPLATE_PATH: path to package template (default: ./package.template.json)
+          - NPM_TOKEN: required for ts:publish
+          - NPM_REGISTRY: npm registry URL (default: https://registry.npmjs.org/)
+
+        Notes and troubleshooting:
+          - Ensure your package template (TEMPLATE_PATH) contains correct "main" and "types" paths
+            relative to the files placed into ${ARTIFACT_DIR}.
+          - Common failure: typo in artifact path ('.artrifacts' vs '.artifacts'). Use ARTIFACT_DIR consistently.
+          - ts:publish requires a valid NPM_TOKEN. In CI, inject it via secrets.
+          - If pnpm reports "No package.json found", check that ${ARTIFACT_DIR}/package.json exists and is readable.
+          - For deterministic builds, keep package.template.json in the repo (e.g., pnpm/ssov1/package.template.json)
+            and set TEMPLATE_PATH accordingly.
+
+        EOF
