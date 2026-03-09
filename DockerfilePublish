@@ -1,0 +1,14 @@
+FROM node:18-bullseye-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates curl git jq && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN corepack enable && \
+    corepack prepare pnpm@latest --activate && \
+    pnpm -v || true
+
+RUN npm install -g typescript@latest
+
+WORKDIR /workspace
+ENTRYPOINT ["sh", "-c"]
