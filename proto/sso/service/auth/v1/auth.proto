@@ -11,14 +11,14 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "SSO Auth API"
     version: "1.0"
-    description: "OAuth2 авторизация, обмен кодов, обновление токенов, получение профиля."
+    description: "OAuth2 authorization, code sharing, token updates, profile retrieval"
   }
 
   schemes: HTTPS
   consumes: "application/json"
   produces: "application/json"
 
-  // Security схема для Authorization: Bearer <token>
+  // Security scheme for Authorization: Bearer <token>
   security_definitions: {
     security: {
       key: "BearerAuth"
