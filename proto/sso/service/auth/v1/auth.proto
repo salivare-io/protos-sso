@@ -46,9 +46,12 @@ service AuthService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Обмен OAuth2 code на access/refresh токены"
-      description: "Требуются заголовки: X-Client-Id, X-Client-Secret"
+      summary: "Exchange OAuth2 code to access/refresh token"
+      description: "Title required Authorization: Bearer <token>"
       tags: "Auth"
+      security: {
+        security_requirement: {key: "BearerAuth"}
+      }
     };
   }
 
@@ -56,8 +59,8 @@ service AuthService {
     option (google.api.http) = {get: "/v1/auth/user"};
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Получение информации о пользователе"
-      description: "Требуется заголовок Authorization: Bearer <token>"
+      summary: "Get user information"
+      description: "Title required Authorization: Bearer <token>"
       tags: "Auth"
       security: {
         security_requirement: {key: "BearerAuth"}
@@ -72,9 +75,12 @@ service AuthService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Обновление токенов"
-      description: "Требуются заголовки: X-Client-Id, X-Client-Secret"
+      summary: "Updating Tokens"
+      description: "Title required Authorization: Bearer <token>"
       tags: "Auth"
+      security: {
+        security_requirement: {key: "BearerAuth"}
+      }
     };
   }
 
@@ -85,9 +91,12 @@ service AuthService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Выход пользователя"
-      description: "Инвалидация refresh токена"
+      summary: "User logout"
+      description: "Title required Authorization: Bearer <token>"
       tags: "Auth"
+      security: {
+        security_requirement: {key: "BearerAuth"}
+      }
     };
   }
 
@@ -98,8 +107,12 @@ service AuthService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Принудительная инвалидация refresh токена"
+      summary: "Forced Token Refresh Disability"
+      description: "Title required Authorization: Bearer <token>"
       tags: "Auth"
+      security: {
+        security_requirement: {key: "BearerAuth"}
+      }
     };
   }
 
@@ -107,8 +120,8 @@ service AuthService {
     option (google.api.http) = {get: "/v1/auth/permissions"};
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Получение списка permissions пользователя"
-      description: "Требуется заголовок Authorization: Bearer <token>"
+      summary: "Get user permissions list"
+      description: "Title required Authorization: Bearer <token>"
       tags: "Auth"
       security: {
         security_requirement: {key: "BearerAuth"}
@@ -132,7 +145,7 @@ message UserDetailsRequest {
 }
 
 message UserDetailsResponse {
-  int64 user_id = 1;
+  string user_id = 1;
   string email = 2;
   string name = 3;
 }

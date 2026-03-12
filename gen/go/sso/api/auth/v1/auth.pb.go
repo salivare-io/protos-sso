@@ -644,28 +644,29 @@ const file_sso_api_auth_v1_auth_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"W\n" +
 	"\x16GetPermissionsResponse\x12=\n" +
-	"\vpermissions\x18\x01 \x03(\v2\x1b.sso.api.auth.v1.PermissionR\vpermissions2\xac\f\n" +
-	"\x0eAuthApiService\x12\xfb\x01\n" +
-	"\fExchangeCode\x12$.sso.api.auth.v1.ExchangeCodeRequest\x1a%.sso.api.auth.v1.ExchangeCodeResponse\"\x9d\x01\x92Az\n" +
-	"\bAuth API\x127Обмен OAuth2 code на access/refresh токены\x1a5Backend вызывает SSO.AuthService.ExchangeCode\x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/api/auth/exchange\x12\xe6\x01\n" +
-	"\fRefreshToken\x12$.sso.api.auth.v1.RefreshTokenRequest\x1a%.sso.api.auth.v1.RefreshTokenResponse\"\x88\x01\x92Af\n" +
-	"\bAuth API\x12#Обновление токенов\x1a5Backend вызывает SSO.AuthService.RefreshToken\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/api/auth/refresh\x12\xcd\x01\n" +
-	"\x06Logout\x12\x1e.sso.api.auth.v1.LogoutRequest\x1a\x1f.sso.api.auth.v1.LogoutResponse\"\x81\x01\x92A`\n" +
-	"\bAuth API\x12#Выход пользователя\x1a/Backend вызывает SSO.AuthService.Logout\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/api/auth/logout\x12\xa3\x02\n" +
-	"\x12RevokeRefreshToken\x12*.sso.api.auth.v1.RevokeRefreshTokenRequest\x1a+.sso.api.auth.v1.RevokeRefreshTokenResponse\"\xb3\x01\x92A\x91\x01\n" +
-	"\bAuth API\x12HПринудительная инвалидация refresh токена\x1a;Backend вызывает SSO.AuthService.RevokeRefreshToken\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/api/auth/revoke\x12\xaf\x02\n" +
+	"\vpermissions\x18\x01 \x03(\v2\x1b.sso.api.auth.v1.PermissionR\vpermissions2\xb6\n" +
 	"\n" +
-	"GetProfile\x12\".sso.api.auth.v1.GetProfileRequest\x1a#.sso.api.auth.v1.GetProfileResponse\"\xd7\x01\x92A\xb7\x01\n" +
-	"\bAuth API\x12:Получение профиля пользователя\x1a]Backend валидирует токен через SSO и возвращает профильb\x10\n" +
+	"\x0eAuthApiService\x12\xe8\x01\n" +
+	"\fExchangeCode\x12$.sso.api.auth.v1.ExchangeCodeRequest\x1a%.sso.api.auth.v1.ExchangeCodeResponse\"\x8a\x01\x92Ag\n" +
+	"\bAuth API\x12,Exchange OAuth2 code to access/refresh token\x1a-Backend triggers SSO.AuthService.ExchangeCode\x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/v1/api/auth/exchange\x12\xc9\x01\n" +
+	"\fRefreshToken\x12$.sso.api.auth.v1.RefreshTokenRequest\x1a%.sso.api.auth.v1.RefreshTokenResponse\"l\x92AJ\n" +
+	"\bAuth API\x12\x0fUpdating Tokens\x1a-Backend triggers SSO.AuthService.RefreshToken\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/v1/api/auth/refresh\x12\xac\x01\n" +
+	"\x06Logout\x12\x1e.sso.api.auth.v1.LogoutRequest\x1a\x1f.sso.api.auth.v1.LogoutResponse\"a\x92A@\n" +
+	"\bAuth API\x12\vUser logout\x1a'Backend triggers SSO.AuthService.Logout\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/api/auth/logout\x12\xf1\x01\n" +
+	"\x12RevokeRefreshToken\x12*.sso.api.auth.v1.RevokeRefreshTokenRequest\x1a+.sso.api.auth.v1.RevokeRefreshTokenResponse\"\x81\x01\x92A`\n" +
+	"\bAuth API\x12\x1fForced Token Refresh Disability\x1a3Backend triggers SSO.AuthService.RevokeRefreshToken\x82\xd3\xe4\x93\x02\x18:\x01*\"\x13/v1/api/auth/revoke\x12\xda\x01\n" +
+	"\n" +
+	"GetProfile\x12\".sso.api.auth.v1.GetProfileRequest\x1a#.sso.api.auth.v1.GetProfileResponse\"\x82\x01\x92Ac\n" +
+	"\bAuth API\x12\x10Get user profile\x1a3Backend validates token via SSO and returns profileb\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/api/auth/profile\x12\x8a\x02\n" +
-	"\x0eGetPermissions\x12&.sso.api.auth.v1.GetPermissionsRequest\x1a'.sso.api.auth.v1.GetPermissionsResponse\"\xa6\x01\x92A\x82\x01\n" +
-	"\bAuth API\x12+Получение списка permissions\x1a7Backend вызывает SSO.AuthService.GetPermissionsb\x10\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/api/auth/profile\x12\xec\x01\n" +
+	"\x0eGetPermissions\x12&.sso.api.auth.v1.GetPermissionsRequest\x1a'.sso.api.auth.v1.GetPermissionsResponse\"\x88\x01\x92Ae\n" +
+	"\bAuth API\x12\x16Get a list permissions\x1a/Backend triggers SSO.AuthService.GetPermissionsb\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/api/auth/permissionsB\xde\x03\x92A\x97\x02\x12\xb1\x01\n" +
-	"\x11Frontend Auth API\x12\x96\x01API для фронтенда. Backend проксирует запросы в SSO и возвращает токены, профиль и permissions.2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x1a\x12\x18/v1/api/auth/permissionsB\xa5\x03\x92A\xde\x01\x12y\n" +
+	"\x11Frontend Auth API\x12_API for frontend. Backend routes requests to SSO and returns tokens, profiles, and permissions.2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
 	"8\n" +
 	"\n" +
 	"BearerAuth\x12*\b\x02\x12\x15Bearer <access_token>\x1a\rAuthorization \x02\n" +

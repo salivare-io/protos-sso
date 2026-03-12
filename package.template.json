@@ -1,6 +1,6 @@
 {
-  "name": "@salivare-io/sso-api",
-  "version": "0.0.10-dev",
+  "name": "@salivare-io/sso-apiv1",
+  "version": "0.0.19-dev",
   "description": "Generated protobuf TS client for SSO API",
   "main": "auth/v1/auth_connect.js",
   "types": "auth/v1/auth_pb.d.ts",
@@ -8,6 +8,9 @@
     "auth"
   ],
   "license": "MIT",
+  "dependencies": {
+    "@bufbuild/protobuf": "^1.0.0"
+  },
   "author": "",
   "repository": {
     "type": "git",

@@ -12,43 +12,86 @@ tasks:
       - docker run --rm -v {{.PWD}}:/workspace protos-sso-gen buf generate --template buf.gen.ts.yaml --path proto/sso/api
 
   ts:build-pack:
-    desc: Build TypeScript, copy package.template.json into ARTIFACT_DIR and npm pack as host user
+    desc: Compile TypeScript with tsc and place compiled files into SRC_DIR/.artifacts/INNER_PATH, then npm pack
     dir: .
     env:
-      PKG_DIR: "gen/ts/sso/api/auth/v1"
-      TMP_BUILD: ".tmp_build"
+      SRC_DIR: "gen/ts/sso/api/auth/v1"      # where generated TS sources live (input)
+      TMP_BUILD: ".tmp_build"               # temporary compile output
       TEMPLATE_PATH: "./package.template.json"
+      INNER_PATH: "auth/v1"                 # short path inside artifact where compiled files will be placed
     cmds:
       - docker build -t protos-sso-publish -f DockerfilePublish .
       - |
-        : "${PKG_DIR:=gen/ts/sso/api/auth/v1}"
-        : "${TEMPLATE_PATH:=pnpm/ssov1/package.template.json}"
-        ARTIFACT_DIR="${PKG_DIR}/.artifacts"
-        TMP_BUILD="${TMP_BUILD:-.tmp_build}"
+        : "${SRC_DIR:=gen/ts/sso/api/auth/v1}"
+        : "${TMP_BUILD:=.tmp_build}"
+        : "${TEMPLATE_PATH:=./package.template.json}"
+        : "${INNER_PATH:=auth/v1}"
 
-        mkdir -p "${ARTIFACT_DIR}"
+        ARTIFACT_DIR="${SRC_DIR}/.artifacts"
+        OUT_TMP="${TMP_BUILD}/out"
+
+        # prepare
         rm -rf "${TMP_BUILD}" || true
-        mkdir -p "${TMP_BUILD}"
+        mkdir -p "${OUT_TMP}"
+        rm -rf "${ARTIFACT_DIR}" || true
+        mkdir -p "${ARTIFACT_DIR}"
 
-        # build inside container into temporary folder
+        # compile with tsc into TMP_BUILD/out
+        # stdout -> tsc.stdout, stderr -> tsc.stderr (removed if empty)
         docker run --rm --entrypoint sh -v {{.PWD}}:/workspace -w /workspace protos-sso-publish -c \
-          'set -eux; rm -rf /workspace/.tmp_build || true; mkdir -p /workspace/.tmp_build; command -v tsc || echo "no tsc in image"; tsc --project /workspace/tsconfig.build.json --outDir /workspace/.tmp_build --listFiles > /workspace/.tmp_build/tsc.stdout 2> /workspace/.tmp_build/tsc.stderr || true'
+          'set -e; rm -rf /workspace/.tmp_build || true; mkdir -p /workspace/.tmp_build/out; \
+           command -v tsc >/dev/null 2>&1 || exit 0; \
+           tsc --project /workspace/tsconfig.build.json --outDir /workspace/.tmp_build/out > /workspace/.tmp_build/tsc.stdout 2> /workspace/.tmp_build/tsc.stderr || true; \
+           [ -s /workspace/.tmp_build/tsc.stderr ] || rm -f /workspace/.tmp_build/tsc.stderr'
 
-        # copy compiled files into artifact dir
-        if [ -d "${TMP_BUILD}" ]; then
-          cp -r "${TMP_BUILD}/." "${ARTIFACT_DIR}/" 2>/dev/null || true
+        # determine compiled source path inside OUT_TMP
+        # common case: generator produces sso/api/auth/v1 under OUT_TMP
+        SRC_REL="sso/api/auth/v1"
+        DEST_DIR="${ARTIFACT_DIR}/${INNER_PATH}"
+
+        mkdir -p "${DEST_DIR}"
+
+        if [ -d "${OUT_TMP}/${SRC_REL}" ]; then
+          # copy only compiled files from expected path
+          cp -r "${OUT_TMP}/${SRC_REL}/." "${DEST_DIR}/" 2>/dev/null || true
+        elif [ -d "${OUT_TMP}/${INNER_PATH}" ]; then
+          # if tsc wrote directly to out/auth/v1
+          cp -r "${OUT_TMP}/${INNER_PATH}/." "${DEST_DIR}/" 2>/dev/null || true
+        else
+          # fallback: copy all .js and .d.ts preserving relative layout under DEST_DIR
+          find "${OUT_TMP}" -type f \( -name '*.js' -o -name '*.d.ts' \) -print0 | while IFS= read -r -d '' f; do
+            rel="${f#${OUT_TMP}/}"
+            destdir="$(dirname "${DEST_DIR}/${rel}")"
+            mkdir -p "${destdir}"
+            cp -f "${f}" "${destdir}/" 2>/dev/null || true
+          done
         fi
 
-        # copy package template into artifact (preferred)
+        # copy package template into artifact root (preferred)
         if [ -f "${TEMPLATE_PATH}" ]; then
           cp -f "${TEMPLATE_PATH}" "${ARTIFACT_DIR}/package.json"
-        elif [ -f "${PKG_DIR}/package.json" ]; then
-          cp -f "${PKG_DIR}/package.json" "${ARTIFACT_DIR}/package.json"
+        elif [ -f "${SRC_DIR}/package.json" ]; then
+          cp -f "${SRC_DIR}/package.json" "${ARTIFACT_DIR}/package.json"
         elif [ -f "./package.json" ]; then
           cp -f "./package.json" "${ARTIFACT_DIR}/package.json"
         else
-          SAFE_NAME="$(echo "${PKG_DIR}" | sed 's|/|-|g' | sed 's|^gen-||' | sed 's|[^a-zA-Z0-9._-]|-|g' | tr '[:upper:]' '[:lower:]')"
-          printf '%s\n' "{ \"name\": \"${SAFE_NAME}\", \"version\": \"0.0.0\", \"main\": \"index.js\", \"types\": \"index.d.ts\" }" > "${ARTIFACT_DIR}/package.json"
+          SAFE_NAME="$(echo "${SRC_DIR}" | sed 's|/|-|g' | sed 's|^gen-||' | sed 's|[^a-zA-Z0-9._-]|-|g' | tr '[:upper:]' '[:lower:]')"
+          printf '%s\n' "{ \"name\": \"${SAFE_NAME}\", \"version\": \"0.0.0\", \"main\": \"${INNER_PATH}/auth_connect.js\", \"types\": \"${INNER_PATH}/auth_pb.d.ts\", \"files\": [\"${INNER_PATH}\"] }" > "${ARTIFACT_DIR}/package.json"
+        fi
+
+        # ensure package.json declares runtime dependency @bufbuild/protobuf so consumers install it
+        PKG_JSON="${ARTIFACT_DIR}/package.json"
+        if [ -f "${PKG_JSON}" ]; then
+          if command -v jq >/dev/null 2>&1; then
+            jq ' .dependencies += {"@bufbuild/protobuf":"^1.0.0"}' "${PKG_JSON}" > "${PKG_JSON}.tmp" && mv "${PKG_JSON}.tmp" "${PKG_JSON}" || true
+          else
+            # best-effort insertion without jq
+            if ! grep -q '"dependencies"' "${PKG_JSON}" 2>/dev/null; then
+              sed -E 's/^( *\})$/  , "dependencies": { "@bufbuild/protobuf": "^1.0.0" }\n\1/' "${PKG_JSON}" > "${PKG_JSON}.tmp" && mv "${PKG_JSON}.tmp" "${PKG_JSON}" || true
+            else
+              awk 'BEGIN{p=0} /"dependencies"/{print; p=1; next} { if(p && /\}/){ print "    \"@bufbuild/protobuf\": \"^1.0.0\","; p=0 } print }' "${PKG_JSON}" > "${PKG_JSON}.tmp" && mv "${PKG_JSON}.tmp" "${PKG_JSON}" || true
+            fi
+          fi
         fi
 
         # ensure ownership so files belong to host user
@@ -56,13 +99,13 @@ tasks:
         docker run --rm -v {{.PWD}}:/workspace -w /workspace protos-sso-publish \
           sh -c "chown -R ${HOST_UID}:${HOST_GID} /workspace/${ARTIFACT_DIR} || true"
 
-        # pack as host user
+        # pack as host user from artifact dir
         docker run --rm -v {{.PWD}}:/workspace -w /workspace/"${ARTIFACT_DIR}" --user "$(id -u):$(id -g)" protos-sso-publish \
-          sh -c "set -eux; npm pack --silent || true"
+          sh -c "set -e; npm pack --silent || true"
 
+        # cleanup tmp build
         rm -rf "${TMP_BUILD}" || true
     silent: false
-
 
   ts:publish:
     desc: Publish generated package to npm using protos-sso-publish. Requires NPM_TOKEN.

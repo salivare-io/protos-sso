@@ -11,7 +11,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "Frontend Auth API"
     version: "1.0"
-    description: "API для фронтенда. Backend проксирует запросы в SSO и возвращает токены, профиль и permissions."
+    description: "API for frontend. Backend routes requests to SSO and returns tokens, profiles, and permissions."
   }
 
   schemes: HTTPS
@@ -39,8 +39,8 @@ service AuthApiService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Обмен OAuth2 code на access/refresh токены"
-      description: "Backend вызывает SSO.AuthService.ExchangeCode"
+      summary: "Exchange OAuth2 code to access/refresh token"
+      description: "Backend triggers SSO.AuthService.ExchangeCode"
       tags: "Auth API"
     };
   }
@@ -52,8 +52,8 @@ service AuthApiService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Обновление токенов"
-      description: "Backend вызывает SSO.AuthService.RefreshToken"
+      summary: "Updating Tokens"
+      description: "Backend triggers SSO.AuthService.RefreshToken"
       tags: "Auth API"
     };
   }
@@ -65,8 +65,8 @@ service AuthApiService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Выход пользователя"
-      description: "Backend вызывает SSO.AuthService.Logout"
+      summary: "User logout"
+      description: "Backend triggers SSO.AuthService.Logout"
       tags: "Auth API"
     };
   }
@@ -78,8 +78,8 @@ service AuthApiService {
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Принудительная инвалидация refresh токена"
-      description: "Backend вызывает SSO.AuthService.RevokeRefreshToken"
+      summary: "Forced Token Refresh Disability"
+      description: "Backend triggers SSO.AuthService.RevokeRefreshToken"
       tags: "Auth API"
     };
   }
@@ -88,8 +88,8 @@ service AuthApiService {
     option (google.api.http) = { get: "/v1/api/auth/profile" };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Получение профиля пользователя"
-      description: "Backend валидирует токен через SSO и возвращает профиль"
+      summary: "Get user profile"
+      description: "Backend validates token via SSO and returns profile"
       tags: "Auth API"
       security: { security_requirement: { key: "BearerAuth" } }
     };
@@ -99,8 +99,8 @@ service AuthApiService {
     option (google.api.http) = { get: "/v1/api/auth/permissions" };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Получение списка permissions"
-      description: "Backend вызывает SSO.AuthService.GetPermissions"
+      summary: "Get a list permissions"
+      description: "Backend triggers SSO.AuthService.GetPermissions"
       tags: "Auth API"
       security: { security_requirement: { key: "BearerAuth" } }
     };

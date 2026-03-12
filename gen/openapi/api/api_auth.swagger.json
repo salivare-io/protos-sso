@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Frontend Auth API",
-    "description": "API для фронтенда. Backend проксирует запросы в SSO и возвращает токены, профиль и permissions.",
+    "description": "API for frontend. Backend routes requests to SSO and returns tokens, profiles, and permissions.",
     "version": "1.0"
   },
   "tags": [
@@ -22,8 +22,8 @@
   "paths": {
     "/v1/api/auth/exchange": {
       "post": {
-        "summary": "Обмен OAuth2 code на access/refresh токены",
-        "description": "Backend вызывает SSO.AuthService.ExchangeCode",
+        "summary": "Exchange OAuth2 code to access/refresh token",
+        "description": "Backend triggers SSO.AuthService.ExchangeCode",
         "operationId": "AuthApiService_ExchangeCode",
         "responses": {
           "200": {
@@ -56,8 +56,8 @@
     },
     "/v1/api/auth/logout": {
       "post": {
-        "summary": "Выход пользователя",
-        "description": "Backend вызывает SSO.AuthService.Logout",
+        "summary": "User logout",
+        "description": "Backend triggers SSO.AuthService.Logout",
         "operationId": "AuthApiService_Logout",
         "responses": {
           "200": {
@@ -90,8 +90,8 @@
     },
     "/v1/api/auth/permissions": {
       "get": {
-        "summary": "Получение списка permissions",
-        "description": "Backend вызывает SSO.AuthService.GetPermissions",
+        "summary": "Get a list permissions",
+        "description": "Backend triggers SSO.AuthService.GetPermissions",
         "operationId": "AuthApiService_GetPermissions",
         "responses": {
           "200": {
@@ -119,8 +119,8 @@
     },
     "/v1/api/auth/profile": {
       "get": {
-        "summary": "Получение профиля пользователя",
-        "description": "Backend валидирует токен через SSO и возвращает профиль",
+        "summary": "Get user profile",
+        "description": "Backend validates token via SSO and returns profile",
         "operationId": "AuthApiService_GetProfile",
         "responses": {
           "200": {
@@ -148,8 +148,8 @@
     },
     "/v1/api/auth/refresh": {
       "post": {
-        "summary": "Обновление токенов",
-        "description": "Backend вызывает SSO.AuthService.RefreshToken",
+        "summary": "Updating Tokens",
+        "description": "Backend triggers SSO.AuthService.RefreshToken",
         "operationId": "AuthApiService_RefreshToken",
         "responses": {
           "200": {
@@ -182,8 +182,8 @@
     },
     "/v1/api/auth/revoke": {
       "post": {
-        "summary": "Принудительная инвалидация refresh токена",
-        "description": "Backend вызывает SSO.AuthService.RevokeRefreshToken",
+        "summary": "Forced Token Refresh Disability",
+        "description": "Backend triggers SSO.AuthService.RevokeRefreshToken",
         "operationId": "AuthApiService_RevokeRefreshToken",
         "responses": {
           "200": {

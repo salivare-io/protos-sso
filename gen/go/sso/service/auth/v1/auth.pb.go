@@ -222,7 +222,7 @@ func (x *UserDetailsRequest) GetAccessToken() string {
 
 type UserDetailsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -259,11 +259,11 @@ func (*UserDetailsResponse) Descriptor() ([]byte, []int) {
 	return file_sso_service_auth_v1_auth_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *UserDetailsResponse) GetUserId() int64 {
+func (x *UserDetailsResponse) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 func (x *UserDetailsResponse) GetEmail() string {
@@ -690,7 +690,7 @@ const file_sso_service_auth_v1_auth_proto_rawDesc = "" +
 	"\x12UserDetailsRequest\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\"X\n" +
 	"\x13UserDetailsResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x14\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\":\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
@@ -715,27 +715,40 @@ const file_sso_service_auth_v1_auth_proto_rawDesc = "" +
 	"\bProvider\x12\x18\n" +
 	"\x14PROVIDER_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fPROVIDER_GOOGLE\x10\x01\x12\x13\n" +
-	"\x0fPROVIDER_YANDEX\x10\x022\x96\f\n" +
-	"\vAuthService\x12\x8a\x02\n" +
-	"\fExchangeCode\x12(.sso.service.auth.v1.ExchangeCodeRequest\x1a).sso.service.auth.v1.ExchangeCodeResponse\"\xa4\x01\x92A\x84\x01\n" +
-	"\x04Auth\x127Обмен OAuth2 code на access/refresh токены\x1aCТребуются заголовки: X-Client-Id, X-Client-Secret\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/auth/exchange\x12\x9e\x02\n" +
-	"\vUserDetails\x12'.sso.service.auth.v1.UserDetailsRequest\x1a(.sso.service.auth.v1.UserDetailsResponse\"\xbb\x01\x92A\xa2\x01\n" +
-	"\x04Auth\x12CПолучение информации о пользователе\x1aCТребуется заголовок Authorization: Bearer <token>b\x10\n" +
+	"\x0fPROVIDER_YANDEX\x10\x022\xf3\n" +
+	"\n" +
+	"\vAuthService\x12\xf9\x01\n" +
+	"\fExchangeCode\x12(.sso.service.auth.v1.ExchangeCodeRequest\x1a).sso.service.auth.v1.ExchangeCodeResponse\"\x93\x01\x92At\n" +
+	"\x04Auth\x12,Exchange OAuth2 code to access/refresh token\x1a,Title required Authorization: Bearer <token>b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x0f\x12\r/v1/auth/user\x12\xf4\x01\n" +
-	"\fRefreshToken\x12(.sso.service.auth.v1.RefreshTokenRequest\x1a).sso.service.auth.v1.RefreshTokenResponse\"\x8e\x01\x92Ap\n" +
-	"\x04Auth\x12#Обновление токенов\x1aCТребуются заголовки: X-Client-Id, X-Client-Secret\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/auth/refresh\x12\xc8\x01\n" +
-	"\x06Logout\x12\".sso.service.auth.v1.LogoutRequest\x1a#.sso.service.auth.v1.LogoutResponse\"u\x92AX\n" +
-	"\x04Auth\x12#Выход пользователя\x1a+Инвалидация refresh токена\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logout\x12\xe4\x01\n" +
-	"\x12RevokeRefreshToken\x12..sso.service.auth.v1.RevokeRefreshTokenRequest\x1a/.sso.service.auth.v1.RevokeRefreshTokenResponse\"m\x92AP\n" +
-	"\x04Auth\x12HПринудительная инвалидация refresh токена\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/revoke\x12\xaf\x02\n" +
-	"\x0eGetPermissions\x12*.sso.service.auth.v1.GetPermissionsRequest\x1a+.sso.service.auth.v1.GetPermissionsResponse\"\xc3\x01\x92A\xa3\x01\n" +
-	"\x04Auth\x12DПолучение списка permissions пользователя\x1aCТребуется заголовок Authorization: Bearer <token>b\x10\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/v1/auth/exchange\x12\xd6\x01\n" +
+	"\vUserDetails\x12'.sso.service.auth.v1.UserDetailsRequest\x1a(.sso.service.auth.v1.UserDetailsResponse\"t\x92A\\\n" +
+	"\x04Auth\x12\x14Get user information\x1a,Title required Authorization: Bearer <token>b\x10\n" +
 	"\x0e\n" +
 	"\n" +
-	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/auth/permissionsB\xdb\x03\x92A\xf8\x01\x12\x92\x01\n" +
-	"\fSSO Auth API\x12}OAuth2 авторизация, обмен кодов, обновление токенов, получение профиля.2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x0f\x12\r/v1/auth/user\x12\xda\x01\n" +
+	"\fRefreshToken\x12(.sso.service.auth.v1.RefreshTokenRequest\x1a).sso.service.auth.v1.RefreshTokenResponse\"u\x92AW\n" +
+	"\x04Auth\x12\x0fUpdating Tokens\x1a,Title required Authorization: Bearer <token>b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/auth/refresh\x12\xc3\x01\n" +
+	"\x06Logout\x12\".sso.service.auth.v1.LogoutRequest\x1a#.sso.service.auth.v1.LogoutResponse\"p\x92AS\n" +
+	"\x04Auth\x12\vUser logout\x1a,Title required Authorization: Bearer <token>b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logout\x12\xfc\x01\n" +
+	"\x12RevokeRefreshToken\x12..sso.service.auth.v1.RevokeRefreshTokenRequest\x1a/.sso.service.auth.v1.RevokeRefreshTokenResponse\"\x84\x01\x92Ag\n" +
+	"\x04Auth\x12\x1fForced Token Refresh Disability\x1a,Title required Authorization: Bearer <token>b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/revoke\x12\xec\x01\n" +
+	"\x0eGetPermissions\x12*.sso.service.auth.v1.GetPermissionsRequest\x1a+.sso.service.auth.v1.GetPermissionsResponse\"\x80\x01\x92Aa\n" +
+	"\x04Auth\x12\x19Get user permissions list\x1a,Title required Authorization: Bearer <token>b\x10\n" +
+	"\x0e\n" +
+	"\n" +
+	"BearerAuth\x12\x00\x82\xd3\xe4\x93\x02\x16\x12\x14/v1/auth/permissionsB\xa1\x03\x92A\xbe\x01\x12Y\n" +
+	"\fSSO Auth API\x12DOAuth2 authorization, code sharing, token updates, profile retrieval2\x031.0*\x01\x022\x10application/json:\x10application/jsonZ:\n" +
 	"8\n" +
 	"\n" +
 	"BearerAuth\x12*\b\x02\x12\x15Bearer <access_token>\x1a\rAuthorization \x02\n" +
